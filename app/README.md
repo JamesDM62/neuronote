@@ -1,7 +1,7 @@
 # Database Schema Design
 ![db-schema]
 
-[db-schema]: /neuronote/schema/schema.png
+[db-schema]: ![/neuronote/schema/schema.png](https://res.cloudinary.com/duv814uve/image/upload/v1746404120/schema_iykbrl.png)
 
 
 ## Render Live Service Link:

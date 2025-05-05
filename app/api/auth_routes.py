@@ -13,7 +13,7 @@ def authenticate():
     Authenticates a user.
     """
     if current_user.is_authenticated:
-        return current_user.to_dict()
+        return {'user': current_user.to_dict()}
     return {'errors': {'message': 'Unauthorized'}}, 401
 
 
@@ -27,10 +27,14 @@ def login():
     # form manually to validate_on_submit can be used
     form['csrf_token'].data = request.cookies['csrf_token']
     if form.validate_on_submit():
+        credential = form.data['credential']
         # Add the user to the session, we are logged in!
-        user = User.query.filter(User.email == form.data['email']).first()
-        login_user(user)
-        return user.to_dict()
+        user = User.query.filter((User.email == credential) | (User.username == credential)).first()
+        
+        if user:
+            login_user(user)
+            return {'user': user.to_dict()}
+    
     return form.errors, 401
 
 
@@ -54,6 +58,8 @@ def sign_up():
         user = User(
             username=form.data['username'],
             email=form.data['email'],
+            first_name=form.data['first_name'],
+            last_name=form.data['last_name'],
             password=form.data['password']
         )
         db.session.add(user)

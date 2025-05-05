@@ -97,6 +97,12 @@ def delete_notebook(notebook_id):
     if not notebook or notebook.user_id != current_user.id:
         return {"message": "Notebook couldn't be found"}, 404
     
+    # Prevent deletion if notebook contains notes
+    if notebook.notes and len(notebook.notes) > 0:
+        return {
+            "error": "Cannot delete notebook while it contains notes."
+        }, 400
+    
     db.session.delete(notebook)
     db.session.commit()
 

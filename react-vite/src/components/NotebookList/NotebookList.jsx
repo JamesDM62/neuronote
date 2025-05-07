@@ -1,19 +1,30 @@
+import { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useState } from "react";
 import { thunkFetchNotes } from "../../redux/notes";
 import {
   thunkDeleteNotebook,
   thunkUpdateNotebook,
+  thunkFetchNotebooks,
 } from "../../redux/notebooks";
 import { setNotebookFilter } from "../../redux/noteFilters";
 import CreateNotebookForm from "../CreateNotebookForm/CreateNotebookForm";
 
 export default function NotebookList() {
   const dispatch = useDispatch();
-  const notebooks = useSelector((state) => Object.values(state.notebooks));
+  const user = useSelector((state) => state.session.user);
+  const notebookObj = useSelector((state) => state.notebooks);
+  const notebooks = useMemo(() => Object.values(notebookObj), [notebookObj]);
   const selectedNotebookId = useSelector((state) => state.filters.notebookId);
   const [editId, setEditId] = useState(null);
   const [editTitle, setEditTitle] = useState("");
+  
+
+  useEffect(() => {
+    if (!user) return;
+    dispatch(thunkFetchNotebooks());
+  }, [dispatch, user]);
+  
+  
 
   const handleSelect = (notebookId) => {
     dispatch(setNotebookFilter(notebookId));
@@ -91,7 +102,6 @@ export default function NotebookList() {
     </div>
   );
 }
-
 
 
 

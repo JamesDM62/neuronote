@@ -5,9 +5,11 @@ import { thunkLogout } from "../../redux/session";
 import OpenModalMenuItem from "./OpenModalMenuItem";
 import LoginFormModal from "../LoginFormModal";
 import SignupFormModal from "../SignupFormModal";
+import { useNavigate } from "react-router-dom";
 
 function ProfileButton() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [showMenu, setShowMenu] = useState(false);
   const user = useSelector((store) => store.session.user);
   const ulRef = useRef();
@@ -33,11 +35,12 @@ function ProfileButton() {
 
   const closeMenu = () => setShowMenu(false);
 
-  const logout = (e) => {
+  const logout = async (e) => {
     e.preventDefault();
-    dispatch(thunkLogout());
+    await dispatch(thunkLogout());
     closeMenu();
   };
+  
 
   return (
     <>
@@ -48,11 +51,13 @@ function ProfileButton() {
         <ul className={"profile-dropdown"} ref={ulRef}>
           {user ? (
             <>
-              <li>{user.username}</li>
+              <li><strong>{user.username}</strong></li>
               <li>{user.email}</li>
-              <li>
-                <button onClick={logout}>Log Out</button>
-              </li>
+              <li><button onClick={() => { navigate('/dashboard'); closeMenu(); }}>My Dashboard</button></li>
+              <li><button onClick={() => { navigate('/notes'); closeMenu(); }}>My Notes</button></li>
+              <li><button onClick={() => { navigate('/notebooks'); closeMenu(); }}>My Notebooks</button></li>
+              <li><button onClick={() => { navigate('/tasks'); closeMenu(); }}>My Tasks</button></li>
+              <li><button onClick={logout}>Log Out</button></li>
             </>
           ) : (
             <>

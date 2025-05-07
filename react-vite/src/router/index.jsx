@@ -6,6 +6,9 @@ import ProtectedRoute from "../components/ProtectedRoute/ProtectedRoute";
 import LandingPage from "../components/LandingPage/LandingPage";
 import Dashboard from "../components/Dashboard/Dashboard";
 import NoteEditor from "../components/NoteEditor/NoteEditor";
+import NoteList from "../components/NoteList/NoteList";
+import NotebookList from "../components/NotebookList/NotebookList";
+import TaskList from "../components/TaskList/TaskList"; // <-- Only if this file exists
 
 export const router = createBrowserRouter([
   {
@@ -32,6 +35,22 @@ export const router = createBrowserRouter([
         ),
       },
       {
+        path: "notes",
+        element: (
+          <ProtectedRoute>
+            <NoteList />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "notebooks",
+        element: (
+          <ProtectedRoute>
+            <NotebookList />
+          </ProtectedRoute>
+        ),
+      },
+      {
         path: "notes/:noteId",
         element: (
           <ProtectedRoute>
@@ -39,6 +58,16 @@ export const router = createBrowserRouter([
           </ProtectedRoute>
         ),
       },
+      {
+        path: "tasks",
+        element: (
+          <ProtectedRoute>
+            <TaskList />
+          </ProtectedRoute>
+        ),
+      },
     ],
   },
 ]);
+
+

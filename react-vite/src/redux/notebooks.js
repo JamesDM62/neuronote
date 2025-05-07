@@ -27,7 +27,10 @@ const setNotebook = (notebook) => ({
 
 // Thunk: Fetch all notebooks
 export const thunkFetchNotebooks = () => async (dispatch) => {
-  const res = await fetch("/api/notebooks");
+  const res = await fetch("/api/notebooks", {
+    method: "GET",
+    credentials: "include", // sends cookies/session
+  });
 
   if (res.ok) {
     const data = await res.json();
@@ -36,6 +39,7 @@ export const thunkFetchNotebooks = () => async (dispatch) => {
     console.error("Failed to fetch notebooks");
   }
 };
+
 
 // Thunk: Create a notebook
 export const thunkCreateNotebook = (title) => async (dispatch) => {

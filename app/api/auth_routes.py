@@ -28,23 +28,24 @@ def login():
     form['csrf_token'].data = request.cookies['csrf_token']
     if form.validate_on_submit():
         credential = form.data['credential']
+        password = form.data['password']
         # Add the user to the session, we are logged in!
         user = User.query.filter((User.email == credential) | (User.username == credential)).first()
         
-        if user:
+        if user and user.check_password(password):
             login_user(user)
             return {'user': user.to_dict()}
     
     return form.errors, 401
 
 
-@auth_routes.route('/logout')
+@auth_routes.route('/logout', methods=["DELETE"])
 def logout():
     """
     Logs a user out
     """
     logout_user()
-    return {'message': 'User logged out'}
+    return {'message': 'User logged out'}, 200
 
 
 @auth_routes.route('/signup', methods=['POST'])

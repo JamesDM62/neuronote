@@ -10,12 +10,14 @@ import notebooksReducer from "./notebooks";
 import tagsReducer from "./tags";
 import notesReducer from "./notes";
 import filtersReducer from "./noteFilters";
+import tasksReducer from "./tasks";
 
 const rootReducer = combineReducers({
   session: sessionReducer,
   notebooks: notebooksReducer,
   tags: tagsReducer,
   notes: notesReducer,
+  tasks: tasksReducer,
   filters: filtersReducer,
 });
 

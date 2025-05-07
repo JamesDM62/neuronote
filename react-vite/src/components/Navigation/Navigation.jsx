@@ -30,7 +30,7 @@ export default function Navigation() {
             <NavLink to="/dashboard">Dashboard</NavLink>
             <NavLink to="/notes">My Notes</NavLink>
             <NavLink to="/notebooks">My Notebooks</NavLink>
-            <NavLink to="/tags">Tags</NavLink>
+            <NavLink to="/tasks">Tasks</NavLink>
           </>
         )}
       </div>

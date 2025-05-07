@@ -21,6 +21,10 @@ app = Flask(__name__, static_folder='../react-vite/dist', static_url_path='/')
 login = LoginManager(app)
 login.login_view = 'auth.unauthorized'
 
+@login.unauthorized_handler
+def unauthorized():
+    return {'error': 'Unauthorized'}, 401
+
 
 @login.user_loader
 def load_user(id):
@@ -45,7 +49,7 @@ Migrate(app, db)
 from .models import User, Notebook, Note, Task, Tag
 
 # Application Security
-CORS(app)
+CORS(app, supports_credentials=True, origins=["http://localhost:5173"])
 
 
 # Since we are deploying with Docker and Flask,

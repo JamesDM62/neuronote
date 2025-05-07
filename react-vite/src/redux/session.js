@@ -17,6 +17,8 @@ export const thunkRestoreUser = () => async (dispatch) => {
   if (response.ok) {
     const data = await response.json();
     dispatch(setUser(data));
+  } else {
+    dispatch(removeUser());
   }
 };
 
@@ -25,6 +27,7 @@ export const thunkLogin = (credentials) => async (dispatch) => {
   const response = await fetch('/api/auth/login', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
+    credentials: 'include', // ✅ REQUIRED
     body: JSON.stringify(credentials),
   });
 
@@ -62,12 +65,18 @@ export const thunkSignup = (user) => async (dispatch) => {
 
 // Thunk to log out
 export const thunkLogout = () => async (dispatch) => {
-  const response = await fetch('/api/auth/logout', {
-    method: 'DELETE',
+  const res = await fetch("/api/auth/logout", {
+    method: "DELETE",
+    credentials: "include", // REQUIRED
   });
 
-  if (response.ok) dispatch(removeUser());
+  if (res.ok) {
+    dispatch(removeUser()); // ⬅️ This removes user from Redux
+  } else {
+    console.error("❌ Logout failed");
+  }
 };
+
 
 // Reducer
 const initialState = { user: null };

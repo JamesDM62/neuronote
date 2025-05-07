@@ -55,8 +55,6 @@ export default function NoteEditor() {
     };
   }, [title, content, dispatch, noteId, note]);
 
-  const assignedTagIds = note?.tags?.map((tag) => tag.id) || [];
-
   if (!note) return <p>Loading note...</p>;
 
   return (
@@ -75,28 +73,27 @@ export default function NoteEditor() {
         placeholder="Start typing your note..."
       />
 
-      <div className="tag-checkboxes">
-        <h4>Tags:</h4>
-        {allTags.map((tag) => {
-          const isAssigned = assignedTagIds.includes(tag.id);
+      <div className="note-tags">
+        <h4>Tags</h4>
+        <ul style={{ listStyle: "none", paddingLeft: 0 }}>
+          {allTags.map(tag => {
+            const isAssigned = note?.tags?.some(t => t.id === tag.id);
 
-          return (
-            <label key={tag.id} style={{ display: "block" }}>
-              <input
-                type="checkbox"
-                checked={isAssigned}
-                onChange={() => {
-                  if (isAssigned) {
-                    dispatch(thunkUnassignTag(noteId, tag.id));
-                  } else {
-                    dispatch(thunkAssignTag(noteId, tag.id));
+            return (
+              <li key={tag.id}>
+                <button
+                  onClick={() =>
+                    isAssigned
+                      ? dispatch(thunkUnassignTag(note.id, tag.id))
+                      : dispatch(thunkAssignTag(note.id, tag.id))
                   }
-                }}
-              />
-              #{tag.name}
-            </label>
-          );
-        })}
+                >
+                  {isAssigned ? "✅ " : "⬜ "} {tag.name}
+                </button>
+              </li>
+            );
+          })}
+        </ul>
       </div>
 
       {/* Manual save button is optional now, but you can keep it */}

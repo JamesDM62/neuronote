@@ -1,6 +1,5 @@
 import { useSelector } from "react-redux";
 import NotebookList from "../NotebookList/NotebookList";
-import CreateNoteBtn from "../CreateNoteBtn/CreateNoteBtn";
 import NoteList from "../NoteList/NoteList";
 import "./Dashboard.css";
 
@@ -16,7 +15,6 @@ export default function Dashboard() {
         <NotebookList />
       </aside>
       <main>
-        <CreateNoteBtn />
         <NoteList />
       </main>
     </div>

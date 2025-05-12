@@ -1,19 +1,21 @@
 import { useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { thunkFetchNotes } from "../../redux/notes";
+import CreateNoteBtn from "../CreateNoteBtn/CreateNoteBtn";
 
 export default function NoteList() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
 
-  const notebookId = useSelector((state) => state.filters.notebookId);
+  const reduxNotebookId = useSelector((state) => state.filters.notebookId);
+  const notebookId = reduxNotebookId || location.state?.notebookId;
   const rawNotes = useSelector((state) => state.notes);
 
-  // ✅ Memoize notes list to prevent re-renders and selector warnings
   const notes = useMemo(() => {
     return Object.values(rawNotes).filter(
-      (note) => note.notebook_id === notebookId
+      (note) => note.notebookId === notebookId 
     );
   }, [rawNotes, notebookId]);
 
@@ -26,12 +28,18 @@ export default function NoteList() {
   };
 
   if (!notebookId) {
-    return <p>Select a notebook to view notes.</p>;
+    return (
+      <div>
+        <h3>Notes</h3>
+        <p>No notebook selected. Please choose one from My Notebooks.</p>
+      </div>
+    );
   }
 
   return (
     <div>
       <h3>Notes</h3>
+      <CreateNoteBtn />
       {notes.length === 0 ? (
         <p>No notes yet.</p>
       ) : (

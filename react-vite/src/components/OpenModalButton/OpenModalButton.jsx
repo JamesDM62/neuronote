@@ -7,25 +7,25 @@ function OpenModalButton({
   onButtonClick,
   onModalClose
 }) {
-  const { setModalContent, setOnModalClose, closeModal } = useModal();
+  const { setModalContent, setOnModalClose } = useModal();
 
   const onClick = () => {
-    if (onModalClose) setOnModalClose(onModalClose);
+  if (onModalClose) setOnModalClose(onModalClose);
 
-    // Inject closeModal into modalComponent if it's valid JSX
-    const content = React.isValidElement(modalComponent)
-      ? React.cloneElement(modalComponent, { closeModal })
-      : modalComponent;
+  const content = React.isValidElement(modalComponent)
+    ? React.cloneElement(modalComponent)
+    : modalComponent;
 
-    setModalContent(content);
+  console.log("Setting modal content:", content); // 🔍 DEBUG
+  setModalContent(content);
 
-    if (typeof onButtonClick === "function") onButtonClick();
-  };
+  if (typeof onButtonClick === "function") onButtonClick();
+};
+
 
   return <button onClick={onClick}>{buttonText}</button>;
 }
 
 export default OpenModalButton;
-
 
 

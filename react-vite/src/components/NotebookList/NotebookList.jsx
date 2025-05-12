@@ -25,12 +25,10 @@ export default function NotebookList() {
     dispatch(thunkFetchNotebooks());
   }, [dispatch, user]);
 
-
-
   const handleSelect = (notebookId) => {
     dispatch(setNotebookFilter(notebookId));
     dispatch(thunkFetchNotes(notebookId));
-    navigate("/notes");
+    navigate("/notes", { state: { notebookId } });
   };
 
   const handleDelete = async (notebookId) => {
@@ -83,13 +81,15 @@ export default function NotebookList() {
             )}
             <h3 style={{ marginBottom: "0.5rem" }}>{notebook.title}</h3>
             <p style={{ color: "#555" }}>{notebook.description}</p>
-            <div style={{ position: "absolute", top: "8px", right: "8px" }}>
+            <div
+              onClick={(e) => e.stopPropagation()}
+              style={{ position: "absolute", top: "8px", right: "8px", display: "flex", gap: "0.5rem" }}
+            >
               <OpenModalButton
                 buttonText="✏️"
-                onButtonClick={(e) => e.stopPropagation()}
                 modalComponent={<EditNotebookModal notebook={notebook} />}
               />
-              <button onClick={(e) => { e.stopPropagation(); handleDelete(notebook.id); }}>🗑</button>
+              <button onClick={() => handleDelete(notebook.id)}>🗑</button>
             </div>
           </div>
         ))}

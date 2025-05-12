@@ -14,10 +14,15 @@ if (import.meta.env.MODE !== "production") {
   window.sessionActions = sessionActions;
 }
 
-ReactDOM.createRoot(document.getElementById("root")).render(
-  <React.StrictMode>
-    <ReduxProvider store={store}>
-      <RouterProvider router={router} />
-    </ReduxProvider>
-  </React.StrictMode>
-);
+store.dispatch(sessionActions.thunkRestoreUser()).then(() => {
+  ReactDOM.createRoot(document.getElementById("root")).render(
+    <React.StrictMode>
+      <ReduxProvider store={store}>
+        <RouterProvider router={router} />
+      </ReduxProvider>
+    </React.StrictMode>
+  );
+});
+
+
+

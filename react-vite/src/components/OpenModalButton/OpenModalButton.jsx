@@ -1,16 +1,24 @@
 import { useModal } from '../../context/Modal';
+import React from 'react';
 
 function OpenModalButton({
-  modalComponent, // component to render inside the modal
-  buttonText, // text of the button that opens the modal
-  onButtonClick, // optional: callback function that will be called once the button that opens the modal is clicked
-  onModalClose // optional: callback function that will be called once the modal is closed
+  modalComponent,
+  buttonText,
+  onButtonClick,
+  onModalClose
 }) {
-  const { setModalContent, setOnModalClose } = useModal();
+  const { setModalContent, setOnModalClose, closeModal } = useModal();
 
   const onClick = () => {
     if (onModalClose) setOnModalClose(onModalClose);
-    setModalContent(modalComponent);
+
+    // Inject closeModal into modalComponent if it's valid JSX
+    const content = React.isValidElement(modalComponent)
+      ? React.cloneElement(modalComponent, { closeModal })
+      : modalComponent;
+
+    setModalContent(content);
+
     if (typeof onButtonClick === "function") onButtonClick();
   };
 
@@ -18,3 +26,6 @@ function OpenModalButton({
 }
 
 export default OpenModalButton;
+
+
+

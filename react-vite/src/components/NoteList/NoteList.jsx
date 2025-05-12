@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { thunkFetchNotes } from "../../redux/notes";
@@ -6,8 +6,16 @@ import { thunkFetchNotes } from "../../redux/notes";
 export default function NoteList() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
   const notebookId = useSelector((state) => state.filters.notebookId);
-  const notes = useSelector((state) => Object.values(state.notes));
+  const rawNotes = useSelector((state) => state.notes);
+
+  // ✅ Memoize notes list to prevent re-renders and selector warnings
+  const notes = useMemo(() => {
+    return Object.values(rawNotes).filter(
+      (note) => note.notebook_id === notebookId
+    );
+  }, [rawNotes, notebookId]);
 
   useEffect(() => {
     if (notebookId) dispatch(thunkFetchNotes(notebookId));
@@ -38,6 +46,7 @@ export default function NoteList() {
     </div>
   );
 }
+
 
 
 

@@ -1,32 +1,64 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
+import { useModal } from "../../context/Modal";
 import { thunkCreateNotebook } from "../../redux/notebooks";
 
 export default function CreateNotebookForm() {
-  const [title, setTitle] = useState("");
   const dispatch = useDispatch();
+  const { closeModal } = useModal();
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [imageUrl, setImageUrl] = useState("");
+  const [errors, setErrors] = useState({});
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!title.trim()) return;
+    setErrors({});
 
-    try {
-      await dispatch(thunkCreateNotebook(title));
-      setTitle(""); // Clear input
-    } catch (err) {
-      alert(err.error || "Failed to create notebook");
+    const newNotebook = { title, description, imageUrl };
+    const created = await dispatch(thunkCreateNotebook(newNotebook));
+
+    if (created?.errors) {
+      setErrors(created.errors);
+    } else {
+      closeModal();
     }
   };
 
   return (
     <form onSubmit={handleSubmit} style={{ marginBottom: "1rem" }}>
-      <input
-        type="text"
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
-        placeholder="New notebook"
-      />
-      <button type="submit">Add</button>
+      <h3>Create a New Notebook</h3>
+      {errors.title && <p className="error">{errors.title}</p>}
+      <label>
+        Title
+        <input
+          type="text"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          required
+        />
+      </label>
+
+      <label>
+        Description
+        <textarea
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          rows={3}
+        />
+      </label>
+
+      <label>
+        Image URL
+        <input
+          type="text"
+          value={imageUrl}
+          onChange={(e) => setImageUrl(e.target.value)}
+        />
+      </label>
+
+      <button type="submit">Create</button>
     </form>
   );
 }
+

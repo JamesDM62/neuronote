@@ -42,11 +42,12 @@ export const thunkFetchNotebooks = () => async (dispatch) => {
 
 
 // Thunk: Create a notebook
-export const thunkCreateNotebook = (title) => async (dispatch) => {
+export const thunkCreateNotebook = (notebookData) => async (dispatch) => {
   const res = await fetch("/api/notebooks", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ title }),
+    credentials: "include",
+    body: JSON.stringify(notebookData),
   });
 
   if (res.ok) {

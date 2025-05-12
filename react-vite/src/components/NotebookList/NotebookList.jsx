@@ -1,34 +1,36 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { thunkFetchNotes } from "../../redux/notes";
+import { useNavigate } from "react-router-dom";
 import {
   thunkDeleteNotebook,
-  thunkUpdateNotebook,
   thunkFetchNotebooks,
 } from "../../redux/notebooks";
 import { setNotebookFilter } from "../../redux/noteFilters";
 import CreateNotebookForm from "../CreateNotebookForm/CreateNotebookForm";
+import OpenModalButton from "../OpenModalButton";
+import EditNotebookModal from "../EditNotebookModal/EditNotebookModal";
+
 
 export default function NotebookList() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const user = useSelector((state) => state.session.user);
   const notebookObj = useSelector((state) => state.notebooks);
   const notebooks = useMemo(() => Object.values(notebookObj), [notebookObj]);
   const selectedNotebookId = useSelector((state) => state.filters.notebookId);
-  const [editId, setEditId] = useState(null);
-  const [editTitle, setEditTitle] = useState("");
-  
 
   useEffect(() => {
     if (!user) return;
     dispatch(thunkFetchNotebooks());
   }, [dispatch, user]);
-  
-  
+
+
 
   const handleSelect = (notebookId) => {
     dispatch(setNotebookFilter(notebookId));
     dispatch(thunkFetchNotes(notebookId));
+    navigate("/notes");
   };
 
   const handleDelete = async (notebookId) => {
@@ -44,61 +46,54 @@ export default function NotebookList() {
     }
   };
 
-  const startEdit = (notebook) => {
-    setEditId(notebook.id);
-    setEditTitle(notebook.title);
-  };
-
-  const saveEdit = async () => {
-    if (editTitle.trim() === "") {
-      alert("Notebook title cannot be empty");
-      return;
-    }
-
-    await dispatch(thunkUpdateNotebook(editId, { title: editTitle }));
-    setEditId(null);
-    setEditTitle("");
-  };
-
   return (
-    <div>
-      <h3>My Notebooks</h3>
-      <CreateNotebookForm />
-      <ul>
+    <div style={{ padding: "1rem" }}>
+      <h2>My Notebooks</h2>
+      <OpenModalButton
+        buttonText="+ Create Notebook"
+        modalComponent={<CreateNotebookForm />}
+      />
+
+      <div style={{ display: "flex", flexWrap: "wrap", gap: "1rem", marginTop: "1rem" }}>
         {notebooks.map((notebook) => (
-          <li
+          <div
             key={notebook.id}
+            onClick={() => handleSelect(notebook.id)}
             style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
+              width: "300px",
+              border: selectedNotebookId === notebook.id ? "2px solid #333" : "1px solid #ccc",
+              borderRadius: "8px",
+              padding: "1rem",
               cursor: "pointer",
-              fontWeight: selectedNotebookId === notebook.id ? "bold" : "normal",
+              boxShadow: "0 2px 5px rgba(0,0,0,0.1)",
+              position: "relative"
             }}
           >
-            {editId === notebook.id ? (
-              <>
-                <input
-                  value={editTitle}
-                  onChange={(e) => setEditTitle(e.target.value)}
-                  style={{ marginRight: "4px" }}
-                />
-                <button onClick={saveEdit}>💾</button>
-              </>
-            ) : (
-              <>
-                <span onClick={() => handleSelect(notebook.id)}>
-                  {notebook.title}
-                </span>
-                <div>
-                  <button onClick={() => startEdit(notebook)}>✏️</button>
-                  <button onClick={() => handleDelete(notebook.id)}>🗑</button>
-                </div>
-              </>
+            {notebook.imageUrl && (
+              <img
+                src={notebook.imageUrl || "/default-notebook.jpg"}
+                alt={notebook.title}
+                referrerPolicy="no-referrer"
+                onError={(e) => {
+                  e.target.onerror = null;
+                  e.target.src = "/default-notebook.jpg";
+                }}
+                style={{ width: "100%", height: "150px", objectFit: "cover", marginBottom: "0.5rem", borderRadius: "4px" }}
+              />
             )}
-          </li>
+            <h3 style={{ marginBottom: "0.5rem" }}>{notebook.title}</h3>
+            <p style={{ color: "#555" }}>{notebook.description}</p>
+            <div style={{ position: "absolute", top: "8px", right: "8px" }}>
+              <OpenModalButton
+                buttonText="✏️"
+                onButtonClick={(e) => e.stopPropagation()}
+                modalComponent={<EditNotebookModal notebook={notebook} />}
+              />
+              <button onClick={(e) => { e.stopPropagation(); handleDelete(notebook.id); }}>🗑</button>
+            </div>
+          </div>
         ))}
-      </ul>
+      </div>
     </div>
   );
 }

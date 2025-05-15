@@ -1,21 +1,32 @@
 // Action Types
-const SET_TAGS = "tags/set";
+const SET_NOTE_TAGS = "tags/setNoteTags";
 
 // Action Creator
-const setTags = (tags) => ({
-    type: SET_TAGS,
+export const setNoteTags = (tags) => ({
+    type: SET_NOTE_TAGS,
     payload: tags,
 });
+
 
 // Thunk: Fetch all tags
 export const thunkFetchTags = () => async (dispatch) => {
     const res = await fetch("/api/tags");
     if (res.ok) {
         const data = await res.json();
-        dispatch(setTags(data.tags || [])); // adjust if response shape differs
+        dispatch(setNoteTags(data.tags));
     } else {
         console.error("Failed to fetch tags");
     }
+};
+
+export const thunkFetchNoteTags = (noteId) => async (dispatch) => {
+  const res = await fetch(`/api/notes/${noteId}/tags`);
+  if (res.ok) {
+    const data = await res.json(); // { tags: [...] }
+    dispatch(setNoteTags(data.tags)); 
+  } else {
+    console.error("Failed to fetch tags for note", res.status);
+  }
 };
 
 export const thunkCreateTag = (name) => async (dispatch) => {
@@ -53,7 +64,7 @@ const initialState = {};
 
 export default function tagsReducer(state = initialState, action) {
     switch (action.type) {
-        case SET_TAGS: {
+        case SET_NOTE_TAGS: {
             const newState = {};
             action.payload.forEach((tag) => {
                 newState[tag.id] = tag;

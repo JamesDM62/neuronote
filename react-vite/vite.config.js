@@ -14,7 +14,7 @@ export default defineConfig((mode) => ({
   server: {
     open: true,
     proxy: {
-      "/api": "http://localhost:8000", // ✅ match your Flask host
+      "/api": "http://localhost:8000",
     },
   },
 }));

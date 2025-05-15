@@ -33,7 +33,6 @@ def add_tag_to_note(note_id):
             "errors": {"name": "Tag name is required!"}
         }, 400
     
-    # Reuse existing tag if it exists, else create
     tag = Tag.query.filter_by(name=tag_name).first()
 
     if not tag:
@@ -44,7 +43,8 @@ def add_tag_to_note(note_id):
         note.tags.append(tag)
         db.session.commit()
 
-    return tag.to_dict(), 201
+    return note.to_dict(), 200  # ✅ return updated note
+
 
 # Remove a tag from a note
 @tag_routes.route('/notes/<int:note_id>/tags/<int:tag_id>', methods=['DELETE'])
@@ -60,4 +60,4 @@ def remove_tag_from_note(note_id, tag_id):
         note.tags.remove(tag)
         db.session.commit()
 
-    return {'message': "Successfully deleted"}, 200
+    return note.to_dict(), 200  # ✅ return updated note

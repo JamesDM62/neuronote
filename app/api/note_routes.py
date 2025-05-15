@@ -16,6 +16,18 @@ def get_notes_in_notebook(notebook_id):
     notes = Note.query.filter_by(notebook_id=notebook_id).all()
     return jsonify({'notes': [n.to_dict() for n in notes]}), 200
 
+# Get a single note by ID
+@note_routes.route('/notes/<int:note_id>', methods=['GET'])
+@login_required
+def get_note(note_id):
+    note = Note.query.get(note_id)
+
+    if not note or note.user_id != current_user.id:
+        return {"message": "Note couldn't be found"}, 404
+
+    return note.to_dict(), 200
+
+
 # Create a note in a notebook
 @note_routes.route('/notebooks/<int:notebook_id>/notes', methods=['POST'])
 @login_required

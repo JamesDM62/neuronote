@@ -23,41 +23,48 @@ def add_tag_to_note(note_id):
 
     if not note or note.user_id != current_user.id:
         return {"message": "Note couldn't be found"}, 404
-    
+
     data = request.get_json()
-    tag_name = data.get('name')
+    tag_name = data.get('name', '').strip()
 
     if not tag_name:
         return {
             "message": "Validation error",
-            "errors": {"name": "Tag name is required!"}
+            "errors": {"name": "Tag name is required"}
         }, 400
-    
-    tag = Tag.query.filter_by(name=tag_name).first()
+
+    # Check if user already has a tag with this name
+    tag = Tag.query.filter_by(name=tag_name, user_id=current_user.id).first()
 
     if not tag:
-        tag = Tag(name=tag_name)
+        tag = Tag(name=tag_name, user_id=current_user.id)
         db.session.add(tag)
+        db.session.flush()  # Make tag.id available before committing
 
+    # Only link if not already assigned
     if tag not in note.tags:
         note.tags.append(tag)
-        db.session.commit()
 
-    return note.to_dict(), 200  # ✅ return updated note
+    db.session.commit()
+
+    return tag.to_dict(), 201
 
 
 # Remove a tag from a note
 @tag_routes.route('/notes/<int:note_id>/tags/<int:tag_id>', methods=['DELETE'])
 @login_required
-def remove_tag_from_note(note_id, tag_id):
+def delete_tag_from_note(note_id, tag_id):
     note = Note.query.get(note_id)
     tag = Tag.query.get(tag_id)
 
-    if not note or not tag or note.user_id != current_user.id:
+    if not note or not tag or note.user_id != current_user.id or tag.user_id != current_user.id:
         return {"message": "Note or Tag couldn't be found"}, 404
-    
+
     if tag in note.tags:
         note.tags.remove(tag)
-        db.session.commit()
 
-    return note.to_dict(), 200  # ✅ return updated note
+    # Now permanently delete the tag (user-specific)
+    db.session.delete(tag)
+    db.session.commit()
+
+    return {"message": "Successfully deleted"}, 200

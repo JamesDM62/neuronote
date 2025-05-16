@@ -29,8 +29,8 @@ export const thunkFetchNoteTags = (noteId) => async (dispatch) => {
   }
 };
 
-export const thunkCreateTag = (name) => async (dispatch) => {
-    const res = await fetch("/api/tags", {
+export const thunkCreateTag = (noteId, name) => async (dispatch) => {
+    const res = await fetch(`/api/notes/${noteId}/tags`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name }),
@@ -46,8 +46,8 @@ export const thunkCreateTag = (name) => async (dispatch) => {
     }
 };
 
-export const thunkDeleteTag = (tagId) => async (dispatch) => {
-    const res = await fetch(`/api/tags/${tagId}`, {
+export const thunkDeleteTag = (noteId, tagId) => async (dispatch) => {
+    const res = await fetch(`/api/notes/${noteId}/tags/${tagId}`, {
         method: "DELETE",
     });
 

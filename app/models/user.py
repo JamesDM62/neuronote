@@ -21,6 +21,7 @@ class User(db.Model, UserMixin):
     notebooks = relationship('Notebook', back_populates='user', cascade="all, delete-orphan")
     notes = relationship('Note', back_populates='user', cascade="all, delete-orphan")
     tasks = relationship('Task', back_populates='user', cascade="all, delete-orphan")
+    tags = relationship('Tag', back_populates="user", cascade="all, delete-orphan")
 
     @property
     def password(self):

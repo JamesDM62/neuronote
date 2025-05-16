@@ -1,14 +1,14 @@
-import { useEffect, useRef, useState, useMemo } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
   thunkFetchNote,
   thunkUpdateNote,
-  thunkAssignTag,
-  thunkUnassignTag,
   thunkCreateAndAssignTag,
+  thunkDeleteTagFromNote,
   thunkDeleteNote,
 } from "../../redux/notes";
+
 import { thunkFetchNoteTags } from "../../redux/tags";
 import "./NoteEditor.css";
 
@@ -19,8 +19,8 @@ export default function NoteEditor() {
   const [newTagName, setNewTagName] = useState("");
 
   const note = useSelector((state) => state.notes[noteId]);
-  const allTagsObj = useSelector((state) => state.tags);
-  const tagList = useMemo(() => Object.values(allTagsObj), [allTagsObj]);
+  // const allTagsObj = useSelector((state) => state.tags);
+  // const tagList = useMemo(() => Object.values(allTagsObj), [allTagsObj]);
 
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
@@ -70,14 +70,12 @@ export default function NoteEditor() {
     navigate("/notes");
   };
 
-  const handleToggleTag = (tag) => {
-    const isAssigned = note?.tags?.some((t) => t.id === tag.id);
-    if (isAssigned) {
-      dispatch(thunkUnassignTag(note.id, tag.id));
-    } else {
-      dispatch(thunkAssignTag(note.id, tag.id));
-    }
-  };
+  // const handleToggleTag = (tag) => {
+  //   const isAssigned = note?.tags?.some((t) => t.id === tag.id);
+  //   if (isAssigned) {
+  //     dispatch(thunkDeleteTagFromNote(note.id, tag.id));
+  //   }
+  // };
 
   if (!note) return <p>Loading note...</p>;
 
@@ -103,22 +101,25 @@ export default function NoteEditor() {
 
       <div className="note-tags">
         <h4>Tags</h4>
-        {tagList.length === 0 ? (
-          <p>No tags available</p>
-        ) : (
+        {note.tags?.length > 0 ? (
           <ul style={{ listStyle: "none", paddingLeft: 0 }}>
-            {tagList.map((tag) => {
-              const isAssigned = note?.tags?.some((t) => t.id === tag.id);
-              return (
-                <li key={tag.id}>
-                  <button onClick={() => handleToggleTag(tag)}>
-                    {isAssigned ? "✅" : "⬜"} {tag.name}
-                  </button>
-                </li>
-              );
-            })}
+            {note.tags.map((tag) => (
+              <li key={tag.id}>
+                {tag.name}
+                <button
+                  onClick={() => dispatch(thunkDeleteTagFromNote(note.id, tag.id))}
+                  style={{ color: "red", marginLeft: "0.5rem" }}
+                  title="Delete tag"
+                >
+                  ❌
+                </button>
+              </li>
+            ))}
           </ul>
+        ) : (
+          <p>No tags on this note.</p>
         )}
+
         <form
           onSubmit={(e) => {
             e.preventDefault();

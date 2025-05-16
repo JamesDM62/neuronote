@@ -27,6 +27,7 @@ class Note(db.Model):
             'userId': self.user_id,
             'title': self.title,
             'content': self.content,
+            'tags': [tag.to_dict() for tag in self.tags],
             'createdAt': self.created_at.isoformat() if self.created_at else None,
             'updatedAt': self.updated_at.isoformat() if self.updated_at else None
         }

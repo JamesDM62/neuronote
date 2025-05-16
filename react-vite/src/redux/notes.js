@@ -109,58 +109,36 @@ export const thunkDeleteNote = (noteId) => async (dispatch) => {
     }
 };
 
-// Thunk: Create and assign a new tag to a note
-export const thunkCreateAndAssignTag = (noteId, name) => async (dispatch) => {
+export const thunkCreateAndAssignTag = (noteId, tagName) => async (dispatch) => {
   const res = await fetch(`/api/notes/${noteId}/tags`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ name }),
+    body: JSON.stringify({ name: tagName }),
   });
 
   if (res.ok) {
-    const updatedNote = await res.json();
-    dispatch(setNote(updatedNote));
+    const tag = await res.json(); // should return { id, name }
+    dispatch({ type: "tags/add", payload: tag }); // optional if tracking in tags reducer
+    dispatch(thunkFetchNote(noteId)); // refresh note to include updated tags
+    return tag;
   } else {
-    const error = await res.json().catch(() => ({}));
-    console.error("Failed to create/assign tag:", error);
+    const error = await res.json();
+    throw error;
   }
 };
 
-
-// Thunk: Assign a tag to a note
-export const thunkAssignTag = (noteId, tagId) => async (dispatch, getState) => {
-  const tag = getState().tags[tagId];
-  if (!tag) {
-    console.error("Tag not found in state:", tagId);
-    return;
-  }
-
-  const res = await fetch(`/api/notes/${noteId}/tags`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ name: tag.name }), // backend expects a name
+export const thunkDeleteTagFromNote = (noteId, tagId) => async (dispatch) => {
+  const res = await fetch(`/api/notes/${noteId}/tags/${tagId}`, {
+    method: "DELETE"
   });
 
   if (res.ok) {
-    const updatedNote = await res.json();
-    dispatch(setNote(updatedNote));
+    dispatch({ type: "tags/remove", payload: tagId }); // optional
+    dispatch(thunkFetchNote(noteId)); // refresh note to reflect tag removal
   } else {
-    const error = await res.json().catch(() => ({}));
-    console.error("Failed to assign tag:", error);
+    const error = await res.json();
+    throw error;
   }
-};
-
-
-// Thunk: Unassign a tag from a note
-export const thunkUnassignTag = (noteId, tagId) => async (dispatch) => {
-    const res = await fetch(`/api/notes/${noteId}/tags/${tagId}`, {
-        method: "DELETE",
-    });
-
-    if (res.ok) {
-        const updatedNote = await res.json();
-        dispatch(setNote(updatedNote));
-    }
 };
 
 // Reducer

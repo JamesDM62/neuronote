@@ -16,10 +16,11 @@ export const thunkRestoreUser = () => async (dispatch) => {
   const response = await fetch('/api/session');
   if (response.ok) {
     const data = await response.json();
-    dispatch(setUser(data));
+    dispatch(setUser(data.user)); // FIXED
   } else {
     dispatch(removeUser());
   }
+
 };
 
 // Thunk to log in
@@ -33,27 +34,37 @@ export const thunkLogin = (credentials) => async (dispatch) => {
 
   if (response.ok) {
     const data = await response.json();
-    dispatch(setUser(data));
+    dispatch(setUser(data.user)); // FIXED
     return null;
-  } else if (response.status < 500) {
-    const errorMessages = await response.json();
-    return errorMessages;
-  } else {
-    return { server: 'Something went wrong. Please try again' };
   }
+
 };
 
-// Thunk to sign up
-export const thunkSignup = (user) => async (dispatch) => {
+function getCSRFToken() {
+  const match = document.cookie.match(/XSRF-TOKEN=([^;]+)/);
+  return match ? decodeURIComponent(match[1]) : null;
+}
+
+export const thunkSignup = ({ email, username, password }) => async (dispatch) => {
   const response = await fetch('/api/auth/signup', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(user),
+    headers: {
+      'Content-Type': 'application/json',
+      'X-CSRFToken': getCSRFToken(),
+    },
+    credentials: 'include',
+    body: JSON.stringify({
+      email,
+      username,
+      password,
+      first_name: 'Test',     // temporary placeholder
+      last_name: 'User'
+    }),
   });
 
   if (response.ok) {
     const data = await response.json();
-    dispatch(setUser(data));
+    dispatch(setUser(data.user));
     return null;
   } else if (response.status < 500) {
     const errorMessages = await response.json();
@@ -62,6 +73,7 @@ export const thunkSignup = (user) => async (dispatch) => {
     return { server: 'Something went wrong. Please try again' };
   }
 };
+
 
 // Thunk to log out
 export const thunkLogout = () => async (dispatch) => {

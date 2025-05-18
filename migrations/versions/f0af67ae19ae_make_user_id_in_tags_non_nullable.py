@@ -19,7 +19,7 @@ def upgrade():
     env = current_app.config.get("ENV")
     schema = current_app.config.get("SCHEMA") if env == "production" else None
 
-    # ✅ Backfill missing user_id values with ID 1
+    #  Backfill missing user_id values with ID 1
     op.execute("UPDATE tags SET user_id = 1 WHERE user_id IS NULL;")
 
     with op.batch_alter_table('tags', schema=schema) as batch_op:

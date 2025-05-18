@@ -1,9 +1,13 @@
 import logging
 from logging.config import fileConfig
 
+from alembic import context
 from flask import current_app
 
-from alembic import context
+# Get SCHEMA from environment
+import os
+SCHEMA = os.getenv("SCHEMA")
+
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
@@ -93,6 +97,8 @@ def run_migrations_online():
     conf_args = current_app.extensions['migrate'].configure_args
     if conf_args.get("process_revision_directives") is None:
         conf_args["process_revision_directives"] = process_revision_directives
+
+    conf_args["version_table_schema"] = SCHEMA
 
     connectable = get_engine()
 

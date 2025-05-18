@@ -50,8 +50,13 @@ def seed_notes():
     db.session.commit()
 
 def undo_notes():
-    if environment == "production":
-        db.session.execute(text(f"TRUNCATE table {SCHEMA}.notes RESTART IDENTITY CASCADE;"))
-    else:
-        db.session.execute(text("DELETE FROM notes"))
-    db.session.commit()
+    try:
+        if environment == "production":
+            db.session.execute(text(f'TRUNCATE table {SCHEMA}.notes RESTART IDENTITY CASCADE;'))
+        else:
+            db.session.execute(text("DELETE FROM notes"))
+        db.session.commit()
+    except Exception as e:
+        print(f"Skipping undo_notes: {e}")
+        db.session.rollback()
+

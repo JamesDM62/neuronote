@@ -20,10 +20,12 @@ def seed_tags():
     db.session.commit()
 
 def undo_tags():
-    if environment == "production":
-        db.session.execute(text(f"TRUNCATE table {SCHEMA}.tags RESTART IDENTITY CASCADE;"))
-    else:
-        db.session.execute(text("DELETE FROM tags"))
-    db.session.commit()
-
-
+    try:
+        if environment == "production":
+            db.session.execute(text(f'TRUNCATE table {SCHEMA}.tags RESTART IDENTITY CASCADE;'))
+        else:
+            db.session.execute(text("DELETE FROM tags"))
+        db.session.commit()
+    except Exception as e:
+        print(f"Skipping undo_tags: {e}")
+        db.session.rollback()

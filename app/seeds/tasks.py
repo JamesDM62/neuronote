@@ -23,10 +23,14 @@ def seed_tasks():
     db.session.commit()
 
 def undo_tasks():
-    if environment == "production":
-        db.session.execute(text(f"TRUNCATE table {SCHEMA}.tasks RESTART IDENTITY CASCADE;"))
-    else:
-        db.session.execute(text("DELETE FROM tasks"))
-    db.session.commit()
+    try:
+        if environment == "production":
+            db.session.execute(text(f'TRUNCATE table {SCHEMA}.tasks RESTART IDENTITY CASCADE;'))
+        else:
+            db.session.execute(text("DELETE FROM tasks"))
+        db.session.commit()
+    except Exception as e:
+        print(f"Skipping undo_tasks: {e}")
+        db.session.rollback()
 
 

@@ -21,8 +21,12 @@ def seed_notebooks():
     db.session.commit()
 
 def undo_notebooks():
-    if environment == "production":
-        db.session.execute(text(f"TRUNCATE table {SCHEMA}.notebooks RESTART IDENTITY CASCADE;"))
-    else:
-        db.session.execute(text("DELETE FROM notebooks"))
-    db.session.commit()
+    try:
+        if environment == "production":
+            db.session.execute(text(f'TRUNCATE table {SCHEMA}.notebooks RESTART IDENTITY CASCADE;'))
+        else:
+            db.session.execute(text("DELETE FROM notebooks"))
+        db.session.commit()
+    except Exception as e:
+        print(f"Skipping undo_notebooks: {e}")
+        db.session.rollback()

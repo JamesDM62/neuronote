@@ -39,9 +39,12 @@ def seed_users():
 # sqlite3 in development you need to instead use DELETE to remove all data and
 # it will reset the primary keys for you as well.
 def undo_users():
-    if environment == "production":
-        db.session.execute(text(f"TRUNCATE table {SCHEMA}.users RESTART IDENTITY CASCADE;"))
-    else:
-        db.session.execute(text("DELETE FROM users"))
-        
-    db.session.commit()
+    try:
+        if environment == "production":
+            db.session.execute(text(f'TRUNCATE table {SCHEMA}.users RESTART IDENTITY CASCADE;'))
+        else:
+            db.session.execute(text("DELETE FROM users"))
+        db.session.commit()
+    except Exception as e:
+        print(f"Skipping undo_users: {e}")
+        db.session.rollback()

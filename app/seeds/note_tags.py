@@ -18,8 +18,13 @@ def seed_note_tags():
     db.session.commit()
 
 def undo_note_tags():
-    if environment == "production":
-        db.session.execute(text(f'TRUNCATE table {SCHEMA}.note_tags RESTART IDENTITY CASCADE;'))
-    else:
-        db.session.execute(text("DELETE FROM note_tags"))
-    db.session.commit()
+    try:
+        if environment == "production":
+            db.session.execute(text(f'TRUNCATE table {SCHEMA}.note_tags RESTART IDENTITY CASCADE;'))
+        else:
+            db.session.execute(text("DELETE FROM note_tags"))
+        db.session.commit()
+    except Exception as e:
+        print(f"Skipping undo_note_tags: {e}")
+        db.session.rollback()
+    

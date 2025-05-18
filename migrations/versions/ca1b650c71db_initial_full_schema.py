@@ -53,7 +53,7 @@ def upgrade():
         sa.Column('image_url', sa.String(length=255), nullable=False),
         sa.Column('created_at', sa.DateTime(), nullable=True),
         sa.Column('updated_at', sa.DateTime(), nullable=True),
-        sa.ForeignKeyConstraint(['user_id'], [f'{schema}.users.id']),
+        sa.ForeignKeyConstraint(['user_id'], [f'{schema}.users.id'] if schema else ['users.id']),
         sa.PrimaryKeyConstraint('id'),
         schema=schema
     )
@@ -67,7 +67,7 @@ def upgrade():
         sa.Column('is_complete', sa.Boolean(), nullable=False),
         sa.Column('created_at', sa.DateTime(), nullable=True),
         sa.Column('updated_at', sa.DateTime(), nullable=True),
-        sa.ForeignKeyConstraint(['user_id'], [f'{schema}.users.id']),
+        sa.ForeignKeyConstraint(['user_id'], [f'{schema}.users.id'] if schema else ['users.id']),
         sa.PrimaryKeyConstraint('id'),
         schema=schema
     )
@@ -81,8 +81,8 @@ def upgrade():
         sa.Column('content', sa.Text(), nullable=True),
         sa.Column('created_at', sa.DateTime(), nullable=True),
         sa.Column('updated_at', sa.DateTime(), nullable=True),
-        sa.ForeignKeyConstraint(['notebook_id'], [f'{schema}.notebooks.id']),
-        sa.ForeignKeyConstraint(['user_id'], [f'{schema}.users.id']),
+        sa.ForeignKeyConstraint(['notebook_id'], [f'{schema}.notebooks.id'] if schema else ['notebooks.id']),
+        sa.ForeignKeyConstraint(['user_id'], [f'{schema}.users.id'] if schema else ['users.id']),
         sa.PrimaryKeyConstraint('id'),
         schema=schema
     )
@@ -91,8 +91,8 @@ def upgrade():
     op.create_table('note_tags',
         sa.Column('note_id', sa.Integer(), nullable=False),
         sa.Column('tag_id', sa.Integer(), nullable=False),
-        sa.ForeignKeyConstraint(['note_id'], [f'{schema}.notes.id']),
-        sa.ForeignKeyConstraint(['tag_id'], [f'{schema}.tags.id']),
+        sa.ForeignKeyConstraint(['note_id'], [f'{schema}.notes.id'] if schema else ['notes.id']),
+        sa.ForeignKeyConstraint(['tag_id'], [f'{schema}.tags.id'] if schema else ['tags.id']),
         sa.PrimaryKeyConstraint('note_id', 'tag_id'),
         schema=schema
     )
@@ -108,4 +108,5 @@ def downgrade():
     op.drop_table('notebooks', schema=schema)
     op.drop_table('users', schema=schema)
     op.drop_table('tags', schema=schema)
+
 

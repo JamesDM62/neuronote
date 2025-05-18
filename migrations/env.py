@@ -6,7 +6,7 @@ from flask import current_app
 
 # Get SCHEMA from environment
 import os
-SCHEMA = os.getenv("SCHEMA")
+SCHEMA = os.getenv("SCHEMA") if os.getenv("FLASK_ENV") == "production" else None
 
 
 # this is the Alembic Config object, which provides

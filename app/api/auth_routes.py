@@ -4,7 +4,6 @@ from app.forms import LoginForm
 from app.forms import SignUpForm
 from flask_login import current_user, login_user, logout_user, login_required
 from datetime import timedelta
-from flask import current_app as app
 
 auth_routes = Blueprint('auth', __name__)
 
@@ -39,7 +38,6 @@ def login():
 
             # Make session permanent and set expiration to 7 days
             session.permanent = True  # This ensures the session persists between browser restarts
-            app.permanent_session_lifetime = timedelta(days=7) 
             
             return {'user': user.to_dict()}
     

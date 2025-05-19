@@ -18,7 +18,7 @@ export default defineConfig(({ mode }) => ({
     },
   },
   build: {
-    outDir: path.resolve(__dirname, "../client-build"), // ✅ for Render deployment
+    outDir: path.resolve(__dirname, "./dist"), // for Render deployment
     emptyOutDir: true,
   },
 }));

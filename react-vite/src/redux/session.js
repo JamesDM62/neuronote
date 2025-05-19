@@ -13,22 +13,27 @@ const removeUser = () => ({
 
 // Thunk to restore user session (on app load)
 export const thunkRestoreUser = () => async (dispatch) => {
-  const response = await fetch('/api/session');
+  const response = await fetch('/api/session', {
+    credentials: 'include'
+  });
   if (response.ok) {
     const data = await response.json();
-    dispatch(setUser(data.user)); // FIXED
+    dispatch(setUser(data.user));
   } else {
     dispatch(removeUser());
   }
-
 };
+
 
 // Thunk to log in
 export const thunkLogin = (credentials) => async (dispatch) => {
   const response = await fetch('/api/auth/login', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    credentials: 'include', // ✅ REQUIRED
+    headers: { 
+      'Content-Type': 'application/json',
+      'X-CSRFToken': getCSRFToken(),
+    },
+    credentials: 'include', //  REQUIRED
     body: JSON.stringify(credentials),
   });
 

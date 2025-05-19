@@ -3,6 +3,10 @@ from .users import demo_id, marnie_id, bobbie_id
 from sqlalchemy.sql import text
 
 def seed_notebooks():
+    
+    if environment == "production":
+        db.session.execute(text(f"SET search_path TO {SCHEMA}"))
+    
     notebooks = [
         Notebook(user_id=Notebook.demo_id, title="Project Planning", description="Organize thoughts and milestones for the upcoming product launch.", 
                  image_url="https://images.unsplash.com/photo-1581093588401-26ca5f166a4e?fit=crop&w=800&q=80"),

@@ -2,6 +2,10 @@ from app.models import db, Tag, User, environment, SCHEMA
 from sqlalchemy.sql import text
 
 def seed_tags():
+
+    if environment == "production":
+        db.session.execute(text(f"SET search_path TO {SCHEMA}"))
+    
     # Fetch seeded users by email
     demo = User.query.filter_by(email='demo@aa.io').first()
     marnie = User.query.filter_by(email='marnie@aa.io').first()

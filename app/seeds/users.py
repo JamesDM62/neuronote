@@ -8,6 +8,10 @@ bobbie_id = None
 # Adds a demo user, you can add other users here if you want
 def seed_users():
     global demo_id, marnie_id, bobbie_id
+
+    if environment == "production":
+        db.session.execute(text(f"SET search_path TO {SCHEMA}"))
+        
     demo = User(
         username='Demo',
         first_name='Demo',

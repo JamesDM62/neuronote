@@ -2,6 +2,10 @@ from app.models import db, Task, environment, SCHEMA
 from sqlalchemy.sql import text
 
 def seed_tasks():
+    
+    if environment == "production":
+        db.session.execute(text(f"SET search_path TO {SCHEMA}"))
+    
     tasks = [
         # User 1
         Task(user_id=1, title="Fix bug in note editor", description="Users report occasional crash when typing quickly.", is_complete=False),

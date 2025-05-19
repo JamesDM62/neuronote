@@ -2,6 +2,10 @@ from app.models import db, note_tags, environment, SCHEMA
 from sqlalchemy.sql import text
 
 def seed_note_tags():
+
+    if environment == "production":
+        db.session.execute(text(f"SET search_path TO {SCHEMA}"))
+    
     # Each tuple is (note_id, tag_id)
     relationships = [
         (1, 2), (1, 3),

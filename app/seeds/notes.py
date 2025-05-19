@@ -2,6 +2,10 @@ from app.models import db, Note, environment, SCHEMA
 from sqlalchemy.sql import text
 
 def seed_notes():
+
+    if environment == "production":
+        db.session.execute(text(f"SET search_path TO {SCHEMA}"))
+    
     notes = [
         #Notebook 1 user 1
         Note(user_id=1, notebook_id=1, title="Meeting Recap", content="Discussed priorities and timelines. Next steps agreed for the upcoming milestone."),

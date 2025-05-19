@@ -8,6 +8,7 @@ Create Date: 2025-04-30 14:00:34.992916
 from alembic import op
 import sqlalchemy as sa
 from flask import current_app
+import os
 
 # revision identifiers, used by Alembic.
 revision = 'ca1b650c71db'
@@ -17,8 +18,8 @@ depends_on = None
 
 
 def upgrade():
-    env = current_app.config.get("ENV")
-    schema = current_app.config.get("SCHEMA") if env == "production" else None
+    env = os.getenv("FLASK_ENV")
+    schema = os.getenv("SCHEMA") if env == "production" else None
 
     # Tags table
     op.create_table('tags',
@@ -99,8 +100,8 @@ def upgrade():
 
 
 def downgrade():
-    env = current_app.config.get("ENV")
-    schema = current_app.config.get("SCHEMA") if env == "production" else None
+    env = os.getenv("FLASK_ENV")
+    schema = os.getenv("SCHEMA") if env == "production" else None
 
     op.drop_table('note_tags', schema=schema)
     op.drop_table('notes', schema=schema)

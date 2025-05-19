@@ -7,6 +7,7 @@ Create Date: 2025-05-15 21:22:53.457108
 from alembic import op
 import sqlalchemy as sa
 from flask import current_app
+import os
 
 # revision identifiers, used by Alembic.
 revision = 'b6b9e57e9928'
@@ -16,8 +17,8 @@ depends_on = None
 
 
 def upgrade():
-    env = current_app.config.get("ENV")
-    schema = current_app.config.get("SCHEMA") if env == "production" else None
+    env = os.getenv("FLASK_ENV")
+    schema = os.getenv("SCHEMA") if env == "production" else None
 
     with op.batch_alter_table('tags', schema=schema) as batch_op:
         batch_op.add_column(sa.Column('user_id', sa.Integer(), nullable=True))
@@ -30,8 +31,8 @@ def upgrade():
 
 
 def downgrade():
-    env = current_app.config.get("ENV")
-    schema = current_app.config.get("SCHEMA") if env == "production" else None
+    env = os.getenv("FLASK_ENV")
+    schema = os.getenv("SCHEMA") if env == "production" else None
 
     with op.batch_alter_table('tags', schema=schema) as batch_op:
         batch_op.drop_constraint('fk_tags_user_id_users', type_='foreignkey')

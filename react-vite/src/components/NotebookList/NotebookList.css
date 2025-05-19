@@ -1,7 +1,7 @@
 /* Notebook List Container */
 .notebook-list-container {
   padding: 1.5rem;
-  margin-top: 200px; /* Adjust for the navbar */
+  margin-top: 20px; /* Adjust for the navbar */
 }
 
 /* Notebook List Styling */
@@ -27,7 +27,7 @@
 
 /* Notebook Card Styling */
 .notebook-card {
-  width: 100%;
+  width: 80%;
   border: 1px solid #ccc;
   border-radius: 8px;
   padding: 1rem;

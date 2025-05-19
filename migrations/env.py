@@ -106,7 +106,7 @@ def run_migrations_online():
     connectable = get_engine()
 
     with connectable.connect() as connection:
-        print(f"=== SCHEMA IS: {SCHEMA} ===")
+       
         if SCHEMA is None:
             raise Exception("SCHEMA is not set! Did you forget to define it in Render environment settings?")
 

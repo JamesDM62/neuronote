@@ -5,6 +5,8 @@ from .notes import seed_notes, undo_notes
 from .tasks import seed_tasks, undo_tasks
 from .tags import seed_tags, undo_tags
 from .note_tags import seed_note_tags, undo_note_tags
+from sqlalchemy.sql import text
+import time
 
 import os
 
@@ -19,6 +21,16 @@ seed_commands = AppGroup('seed')
 # Creates the `flask seed all` command
 @seed_commands.command('all')
 def seed():
+
+    # Optional: delay to ensure schema is fully ready (esp. on Render)
+    time.sleep(1)
+
+    # Ensure we're using correct schema in case Alembic context is stale
+    from app.models.db import db, SCHEMA, environment
+    if environment == "production":
+        db.session.execute(text(f"SET search_path TO {SCHEMA}"))
+
+
     if environment == 'production':
         # Before seeding in production, you want to run the seed undo 
         # command, which will  truncate all tables prefixed with 

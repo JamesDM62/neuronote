@@ -1,6 +1,6 @@
 """Initial full schema
 
-Revision ID: ca1b650c71db
+Revision ID: forced_reset_1
 Revises: 
 Create Date: 2025-04-30 14:00:34.992916
 """
@@ -11,7 +11,7 @@ from flask import current_app
 import os
 
 # revision identifiers, used by Alembic.
-revision = 'ca1b650c71db'
+revision = 'forced_reset_1'
 down_revision = None
 branch_labels = None
 depends_on = None

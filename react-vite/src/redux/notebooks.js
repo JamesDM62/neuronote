@@ -41,7 +41,6 @@ export const thunkFetchNotebooks = () => async (dispatch) => {
 };
 
 
-// Thunk: Create a notebook
 export const thunkCreateNotebook = (notebookData) => async (dispatch) => {
   const res = await fetch("/api/notebooks", {
     method: "POST",
@@ -55,10 +54,21 @@ export const thunkCreateNotebook = (notebookData) => async (dispatch) => {
     dispatch(addNotebook(newNotebook));
     return newNotebook;
   } else {
-    const error = await res.json();
-    throw error;
+    const errorData = await res.json();  // e.g., { title: [...], image_url: [...] }
+    const flatErrors = [];
+    for (const field in errorData) {
+      const messages = errorData[field];
+      if (Array.isArray(messages)) {
+        messages.forEach((msg) => flatErrors.push(msg));
+      } else if (typeof messages === "string") {
+        flatErrors.push(messages);
+      }
+    }
+
+    return { errors: flatErrors };
   }
 };
+
 
 // Thunk: Delete a notebook
 export const thunkDeleteNotebook = (notebookId) => async (dispatch) => {

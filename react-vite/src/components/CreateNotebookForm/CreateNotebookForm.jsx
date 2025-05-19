@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useModal } from "../../context/Modal";
 import { thunkCreateNotebook } from "../../redux/notebooks";
-import "./CreateNotebookForm.css"; // Import the CSS file for styling
+import "./CreateNotebookForm.css";
 
 export default function CreateNotebookForm() {
   const dispatch = useDispatch();
@@ -10,17 +10,17 @@ export default function CreateNotebookForm() {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [imageUrl, setImageUrl] = useState("");
-  const [errors, setErrors] = useState({});
+  const [errors, setErrors] = useState([]); // use array
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setErrors({});
+    setErrors([]); // reset error state
 
-    const newNotebook = { title, description, imageUrl };
-    const created = await dispatch(thunkCreateNotebook(newNotebook));
+    const notebook = { title, description, imageUrl };
+    const res = await dispatch(thunkCreateNotebook(notebook));
 
-    if (created?.errors) {
-      setErrors(created.errors);
+    if (res?.errors) {
+      setErrors(res.errors); // guaranteed to be array from thunk
     } else {
       closeModal();
     }
@@ -29,7 +29,15 @@ export default function CreateNotebookForm() {
   return (
     <form onSubmit={handleSubmit} className="create-notebook-form">
       <h3>Create a New Notebook</h3>
-      {errors.title && <p className="error">{errors.title}</p>}
+
+      {errors.length > 0 && (
+        <div className="error-messages">
+          {errors.map((err, i) => (
+            <p key={i} className="error">{err}</p>
+          ))}
+        </div>
+      )}
+
       <label>
         Title
         <input

@@ -25,7 +25,6 @@ export const thunkRestoreUser = () => async (dispatch) => {
 };
 
 
-// Thunk to log in
 export const thunkLogin = (credentials) => async (dispatch) => {
   const response = await fetch('/api/auth/login', {
     method: 'POST',
@@ -33,17 +32,22 @@ export const thunkLogin = (credentials) => async (dispatch) => {
       'Content-Type': 'application/json',
       'X-CSRFToken': getCSRFToken(),
     },
-    credentials: 'include', //  REQUIRED
+    credentials: 'include',
     body: JSON.stringify(credentials),
   });
 
   if (response.ok) {
     const data = await response.json();
-    dispatch(setUser(data.user)); // FIXED
+    dispatch(setUser(data.user));
     return null;
+  } else if (response.status < 500) {
+    const errorMessages = await response.json(); // ⬅️ backend errors (e.g. { errors: [...] })
+    return errorMessages;
+  } else {
+    return { errors: ["An error occurred. Please try again."] }; // ← generic fallback
   }
-
 };
+
 
 function getCSRFToken() {
   const match = document.cookie.match(/XSRF-TOKEN=([^;]+)/);
@@ -62,7 +66,7 @@ export const thunkSignup = ({ email, username, password }) => async (dispatch) =
       email,
       username,
       password,
-      first_name: 'Test',     // temporary placeholder
+      first_name: 'Test',
       last_name: 'User'
     }),
   });
@@ -71,13 +75,18 @@ export const thunkSignup = ({ email, username, password }) => async (dispatch) =
     const data = await response.json();
     dispatch(setUser(data.user));
     return null;
-  } else if (response.status < 500) {
-    const errorMessages = await response.json();
-    return errorMessages;
   } else {
-    return { server: 'Something went wrong. Please try again' };
+    const errorData = await response.json(); // { email: [...], password: [...], ... }
+
+    const flatErrors = [];
+    for (const field in errorData) {
+      errorData[field].forEach((msg) => flatErrors.push(msg));
+    }
+
+    return { errors: flatErrors };
   }
 };
+
 
 
 // Thunk to log out

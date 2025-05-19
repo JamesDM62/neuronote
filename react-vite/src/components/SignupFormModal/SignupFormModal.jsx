@@ -31,11 +31,20 @@ function SignupFormModal() {
       })
     );
 
-    if (serverResponse) {
-      setErrors(serverResponse);
+    if (serverResponse?.errors) {
+      const formatted = {};
+      serverResponse.errors.forEach((err) => {
+        if (err.toLowerCase().includes("email")) formatted.email = err;
+        else if (err.toLowerCase().includes("username")) formatted.username = err;
+        else if (err.toLowerCase().includes("password") && !err.toLowerCase().includes("confirm"))
+          formatted.password = err;
+        else formatted.server = err;
+      });
+      setErrors(formatted);
     } else {
       closeModal();
     }
+
   };
 
   return (
@@ -56,7 +65,7 @@ function SignupFormModal() {
             />
           </label>
           {errors.email && <p className="error-message">{errors.email}</p>}
-          
+
           <label className="form-label">
             Username
             <input
@@ -68,7 +77,7 @@ function SignupFormModal() {
             />
           </label>
           {errors.username && <p className="error-message">{errors.username}</p>}
-          
+
           <label className="form-label">
             Password
             <input
@@ -80,7 +89,7 @@ function SignupFormModal() {
             />
           </label>
           {errors.password && <p className="error-message">{errors.password}</p>}
-          
+
           <label className="form-label">
             Confirm Password
             <input
@@ -92,7 +101,7 @@ function SignupFormModal() {
             />
           </label>
           {errors.confirmPassword && <p className="error-message">{errors.confirmPassword}</p>}
-          
+
           <button type="submit" className="signup-button">Sign Up</button>
         </form>
       </div>

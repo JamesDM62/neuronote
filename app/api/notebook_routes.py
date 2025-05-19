@@ -37,7 +37,7 @@ def create_notebook():
         errors['imageUrl'] = "Image URL is required"
 
     if errors:
-        return {"message": "Bad Request", "errors": errors}, 400
+        return errors, 400
 
     new_notebook = Notebook(
         user_id=current_user.id,

@@ -5,7 +5,7 @@
 
 ## Render Live Service Link:
 
-url placeholder
+https://neuronote.onrender.com
 
 ## 📚 Neuronote API Documentation
 

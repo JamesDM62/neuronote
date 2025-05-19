@@ -20,6 +20,13 @@ app = Flask(__name__, static_folder='../react-vite/dist', static_url_path='/')
 
 # Session expiration setting
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(days=7) 
+app.config['SESSION_COOKIE_NAME'] = 'neuronote_session'
+app.config['SESSION_COOKIE_HTTPONLY'] = True  # Prevent JavaScript access to the cookie
+app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'  # Or 'Strict' for more security
+
+# This tells Flask to use secure cookies in production
+if os.environ.get('FLASK_ENV') == 'production':
+    app.config['SESSION_COOKIE_SECURE'] = True  
 
 # Setup login manager
 login = LoginManager(app)

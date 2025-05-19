@@ -5,7 +5,7 @@
     align-items: center;
     padding: 10px 30px;
     background-color: #fff;
-    position: fixed;
+    border-bottom: lightgray solid 1px;
     top: 0;
     left: 0;
     width: 100%;
@@ -18,7 +18,7 @@
 .nav-left {
     display: flex;
     align-items: center;
-    justify-content: flex-start;
+    justify-content: space-around;
     flex-grow: 1;
     width: 100%;
 }

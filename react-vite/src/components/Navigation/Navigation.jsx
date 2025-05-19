@@ -33,10 +33,7 @@ export default function Navigation() {
             <NavLink to="/tasks">Tasks</NavLink>
           </>
         )}
-      </div>
-
-      <div className="nav-right">
-        <ProfileButton />
+        <ProfileButton className="profile"/>
       </div>
     </nav>
   );

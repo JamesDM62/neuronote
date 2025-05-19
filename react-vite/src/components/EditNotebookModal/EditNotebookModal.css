@@ -1,0 +1,83 @@
+/* EditNotebookModal.css */
+.edit-notebook-modal {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 2rem;
+    width: 500px;
+    max-width: 100%;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.edit-notebook-modal h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    color: #333;
+}
+
+.edit-notebook-modal form {
+    width: 100%;
+}
+
+.edit-notebook-modal label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+    color: #555;
+}
+
+.edit-notebook-modal input,
+.edit-notebook-modal textarea {
+    width: 90%;
+    padding: 0.8rem;
+    margin-bottom: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+}
+
+.edit-notebook-modal input[type="text"] {
+    height: 2.5rem;
+}
+
+.edit-notebook-modal textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+.error {
+    color: red;
+    font-size: 0.875rem;
+    margin-bottom: 0.5rem;
+}
+
+.edit-notebook-modal div {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.edit-notebook-modal button {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 4px;
+    background-color: #4CAF50;
+    color: white;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.edit-notebook-modal button[type="button"] {
+    background-color: #f44336;
+}
+
+.edit-notebook-modal button:hover {
+    opacity: 0.9;
+}
+
+.edit-notebook-modal button[type="button"]:hover {
+    opacity: 0.8;
+}

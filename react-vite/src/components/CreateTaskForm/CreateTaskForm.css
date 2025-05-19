@@ -1,0 +1,62 @@
+/* CreateTaskForm.css */
+/* Target the form content inside the modal */
+#modal-content {
+  padding: 2rem;
+  background-color: #fff;
+  border-radius: 8px;
+  max-width: 500px;
+  min-width: 300px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 100%;
+}
+
+.create-task-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.create-task-form h2 {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  color: #333;
+}
+
+.create-task-form input,
+.create-task-form textarea {
+  width: 100%;
+  padding: 0.8rem;
+  margin-bottom: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.create-task-form input[type="text"] {
+  height: 2.5rem;
+}
+
+.create-task-form textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+.create-task-form button {
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.create-task-form button:hover {
+  background-color: #45a049;
+}
+
+.create-task-form .error {
+  color: red;
+  font-size: 0.875rem;
+  margin-bottom: 0.5rem;
+}

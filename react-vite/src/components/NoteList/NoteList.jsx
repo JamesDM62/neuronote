@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useLocation } from "react-router-dom";
 import { thunkFetchNotes } from "../../redux/notes";
 import CreateNoteBtn from "../CreateNoteBtn/CreateNoteBtn";
+import './NoteList.css'
 
 export default function NoteList() {
   const dispatch = useDispatch();
@@ -29,7 +30,7 @@ export default function NoteList() {
 
   if (!notebookId) {
     return (
-      <div>
+      <div className="notes-page-container">
         <h3>Notes</h3>
         <p>No notebook selected. Please choose one from My Notebooks.</p>
       </div>
@@ -37,7 +38,7 @@ export default function NoteList() {
   }
 
   return (
-    <div>
+    <div className="notes-page-container">
       <h3>Notes</h3>
       <CreateNoteBtn />
       {notes.length === 0 ? (
@@ -54,6 +55,7 @@ export default function NoteList() {
     </div>
   );
 }
+
 
 
 

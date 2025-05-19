@@ -10,7 +10,7 @@ import { setNotebookFilter } from "../../redux/noteFilters";
 import CreateNotebookForm from "../CreateNotebookForm/CreateNotebookForm";
 import OpenModalButton from "../OpenModalButton";
 import EditNotebookModal from "../EditNotebookModal/EditNotebookModal";
-
+import './NotebookList.css'; // Ensure the CSS file is correctly linked
 
 export default function NotebookList() {
   const dispatch = useDispatch();
@@ -45,27 +45,19 @@ export default function NotebookList() {
   };
 
   return (
-    <div style={{ padding: "1rem" }}>
+    <div className="notebook-list-container">
       <h2>My Notebooks</h2>
       <OpenModalButton
         buttonText="+ Create Notebook"
         modalComponent={<CreateNotebookForm />}
       />
 
-      <div style={{ display: "flex", flexWrap: "wrap", gap: "1rem", marginTop: "1rem" }}>
+      <div className="notebook-list">
         {notebooks.map((notebook) => (
           <div
             key={notebook.id}
             onClick={() => handleSelect(notebook.id)}
-            style={{
-              width: "300px",
-              border: selectedNotebookId === notebook.id ? "2px solid #333" : "1px solid #ccc",
-              borderRadius: "8px",
-              padding: "1rem",
-              cursor: "pointer",
-              boxShadow: "0 2px 5px rgba(0,0,0,0.1)",
-              position: "relative"
-            }}
+            className={`notebook-card ${selectedNotebookId === notebook.id ? "selected" : ""}`}
           >
             {notebook.imageUrl && (
               <img
@@ -76,20 +68,17 @@ export default function NotebookList() {
                   e.target.onerror = null;
                   e.target.src = "/default-notebook.jpg";
                 }}
-                style={{ width: "100%", height: "150px", objectFit: "cover", marginBottom: "0.5rem", borderRadius: "4px" }}
+                className="notebook-image"
               />
             )}
-            <h3 style={{ marginBottom: "0.5rem" }}>{notebook.title}</h3>
-            <p style={{ color: "#555" }}>{notebook.description}</p>
-            <div
-              onClick={(e) => e.stopPropagation()}
-              style={{ position: "absolute", top: "8px", right: "8px", display: "flex", gap: "0.5rem" }}
-            >
+            <h3>{notebook.title}</h3>
+            <p>{notebook.description}</p>
+            <div className="actions">
               <OpenModalButton
                 buttonText="✏️"
                 modalComponent={<EditNotebookModal notebook={notebook} />}
               />
-              <button onClick={() => handleDelete(notebook.id)}>🗑</button>
+              <button onClick={() => handleDelete(notebook.id)} className="delete-button">🗑</button>
             </div>
           </div>
         ))}
@@ -97,10 +86,3 @@ export default function NotebookList() {
     </div>
   );
 }
-
-
-
-
-
-
-

@@ -8,16 +8,18 @@ import Navigation from "../components/Navigation/Navigation";
 export default function Layout() {
   const dispatch = useDispatch();
   const [isLoaded, setIsLoaded] = useState(false);
+
   useEffect(() => {
     dispatch(thunkRestoreUser()).then(() => setIsLoaded(true));
   }, [dispatch]);
 
   return (
     <>
+      {/* This ensures that the navigation is rendered at the top */}
       <ModalProvider>
-        {isLoaded && <Navigation />}
-        {isLoaded && <Outlet />}
-        <Modal />
+        {isLoaded && <Navigation />}  {/* Render the navigation bar */}
+        {isLoaded && <Outlet />}  {/* Render the content based on routes */}
+        <Modal />  {/* If you are using modals, keep this */}
       </ModalProvider>
     </>
   );

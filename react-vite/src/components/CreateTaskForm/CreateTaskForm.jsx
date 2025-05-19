@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { thunkCreateTask } from "../../redux/tasks";
 import { useModal } from "../../context/Modal";
+import './CreateTaskForm.css';  // Import the CSS file
 
 export default function CreateTaskForm() {
   const dispatch = useDispatch();
@@ -17,7 +18,7 @@ export default function CreateTaskForm() {
 
     const newTask = {
       title: title.trim(),
-      description: description.trim()
+      description: description.trim(),
     };
 
     try {
@@ -30,9 +31,9 @@ export default function CreateTaskForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} className="create-task-form">
       <h2>Create Task</h2>
-      {errors.title && <p style={{ color: "red" }}>{errors.title}</p>}
+      {errors.title && <p className="error">{errors.title}</p>}
       <input
         type="text"
         value={title}
@@ -49,3 +50,4 @@ export default function CreateTaskForm() {
     </form>
   );
 }
+

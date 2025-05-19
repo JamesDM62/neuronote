@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useModal } from "../../context/Modal";
 import { thunkCreateNotebook } from "../../redux/notebooks";
+import "./CreateNotebookForm.css"; // Import the CSS file for styling
 
 export default function CreateNotebookForm() {
   const dispatch = useDispatch();
@@ -26,7 +27,7 @@ export default function CreateNotebookForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit} style={{ marginBottom: "1rem" }}>
+    <form onSubmit={handleSubmit} className="create-notebook-form">
       <h3>Create a New Notebook</h3>
       {errors.title && <p className="error">{errors.title}</p>}
       <label>

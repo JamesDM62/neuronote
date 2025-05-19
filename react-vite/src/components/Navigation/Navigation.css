@@ -1,8 +1,127 @@
-.profile-dropdown {
-  position: absolute;
+/* General Navbar Styling */
+.nav-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 30px;
+    background-color: #fff;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    height: 80px;
+    flex-wrap: nowrap; /* Prevent wrapping */
+}
+
+/* Left Section Styling (Logo, Links, and Profile Button) */
+.nav-left {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    flex-grow: 1;
+    width: 100%;
+}
+
+.nav-left .logo {
+    font-size: 1.4rem;
+    text-decoration: none;
+    color: #333;
+    font-weight: 500;
+    cursor: pointer; /* Add pointer cursor to the logo */
 }
 
 .logo-img {
-  height: 40px;
-  object-fit: contain;
+    height: 250px;
+    object-fit: contain;
 }
+
+/* Links Styling (About, Features, Tasks, etc.) */
+.nav-left a {
+    font-size: 1.4rem;
+    margin: 0 15px; /* Adjust margin to avoid overlap */
+    text-decoration: none;
+    color: #333;
+    font-weight: 500;
+    justify-content: space-between;
+    cursor: pointer; /* Add pointer cursor to the links */
+}
+
+.nav-left a:hover {
+    color: #007bff;
+}
+
+/* Profile Button Styling (FaUserCircle Icon) */
+.nav-left button {
+    font-size: 2rem;
+    padding: 15px 20px;
+    background-color: transparent;
+    color: #007bff;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer; /* Add pointer cursor to profile button */
+    margin-left: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.nav-left button:hover {
+    background-color: rgba(0, 123, 255, 0.1);
+}
+
+/* Profile Dropdown Styling */
+.profile-dropdown {
+    position: absolute;
+    top: 80px;
+    right: 0;
+    background-color: white;
+    border: 1px solid #ccc;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    list-style: none;
+    padding: 10px;
+    margin: 0;
+    width: 200px;
+    z-index: 1000;
+}
+
+.profile-dropdown li {
+    padding: 10px;
+    cursor: pointer; /* Add pointer cursor for items in the dropdown */
+}
+
+.profile-dropdown li button {
+    width: 100%;
+    text-align: left;
+    cursor: pointer; /* Add pointer cursor for button inside the dropdown */
+}
+
+/* Mobile Adjustments */
+@media (max-width: 1024px) {
+    .nav-bar {
+        flex-direction: column; /* Stack items vertically on small screens */
+        align-items: center; /* Center all navbar items */
+    }
+    .nav-left {
+        justify-content: center; /* Ensure items are centered */
+        margin-top: 10px; /* Add space from the navbar */
+    }
+    .nav-left button {
+        margin-top: 10px; /* Add space between button and links */
+    }
+}
+
+@media (max-width: 768px) {
+    .nav-bar {
+        flex-direction: column;
+        align-items: center;
+    }
+    .nav-left {
+        justify-content: center;
+        margin-top: 10px;
+    }
+    .nav-left button {
+        margin-top: 10px;
+    }
+}
+

@@ -2,7 +2,8 @@
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  padding: 2rem;
+  padding: 8rem;
+  padding-top: 12rem;
 }
 
 .note-title {
@@ -16,10 +17,69 @@
   padding: 0.5rem;
 }
 
+/* NoteEditor.css */
+.note-tags form {
+    display: flex;
+    gap: 10px;
+    margin-top: 1rem;
+    align-items: center;
+}
+
+.note-tags input {
+    padding: 0.5rem;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 200px; /* Adjust width as necessary */
+    margin-right: 0.5rem;
+    transition: border-color 0.2s ease;
+}
+
+.note-tags input:focus {
+    outline: none;
+    border-color: #4CAF50; /* Green color on focus */
+}
+
 .note-tags button {
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-size: 0.95rem;
-  margin: 0.25rem 0;
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    background-color: #4CAF50; /* Green background */
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.note-tags button:hover {
+    background-color: #45a049; /* Darker green on hover */
+}
+
+.note-tags button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+.note-tags ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+.note-tags li {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.note-tags li button {
+    margin-left: 0.5rem;
+    color: red;
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.note-tags li button:hover {
+    color: darkred;
 }

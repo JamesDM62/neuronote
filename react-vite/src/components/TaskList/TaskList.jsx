@@ -7,6 +7,7 @@ import {
 } from "../../redux/tasks";
 import OpenModalButton from "../OpenModalButton";
 import CreateTaskForm from "../CreateTaskForm/CreateTaskForm";
+import './TaskList.css'
 
 export default function TaskList() {
   const dispatch = useDispatch();
@@ -48,7 +49,7 @@ export default function TaskList() {
   };
 
   return (
-    <div className="task-list" style={{ maxWidth: "600px", margin: "0 auto" }}>
+    <div className="task-list" style={{ maxWidth: "600px", margin: "0 auto", paddingTop: "8rem", }}>
       <h1>My Tasks</h1>
       <OpenModalButton
         buttonText="+ New Task"

@@ -1,0 +1,132 @@
+/* Modal Overlay - Dark background behind the modal */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7); /* Darker background for better contrast */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999; /* Ensures modal is on top of other content */
+}
+
+/* Modal Container */
+.modal-container {
+    background-color: #ffffff; /* White background for modal */
+    border-radius: 12px; /* Rounded corners */
+    padding: 30px;
+    width: 420px; /* Adjust width to make the modal a little wider */
+    max-width: 100%; /* Ensure modal doesn’t exceed the screen width */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* Larger shadow for floating effect */
+    position: relative;
+    z-index: 10000; /* Ensure modal is above all other content */
+}
+
+/* Modal Header */
+.modal-header {
+    font-size: 2rem; /* Larger header */
+    margin-bottom: 20px;
+    text-align: center;
+    color: #333; /* Darker color for text */
+}
+
+/* Form Styling */
+.modal-form {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch; /* Ensure inputs stretch across the container */
+}
+
+/* Label Styling */
+.form-label {
+    margin-bottom: 8px;
+    font-size: 1rem;
+    font-weight: bold;
+    color: #555; /* Darker label color */
+}
+
+/* Input Styling */
+.form-input {
+    font-size: 1rem;
+    padding: 12px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    transition: border-color 0.3s ease; /* Smooth transition on focus */
+    width: 90%; /* Make input fill the width of the container */
+}
+
+.form-input:focus {
+    border-color: #007bff; /* Blue border on focus */
+    outline: none;
+}
+
+/* Buttons */
+.login-button {
+    background-color: #007bff; /* Blue background color */
+    color: white;
+    font-size: 1.1rem;
+    padding: 12px 20px; /* Increased padding for a more substantial button */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin-top: 10px;
+    width: 100%; /* Make button fill the container */
+}
+
+.login-button:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+}
+
+/* Demo Login Button Styling */
+.demo-login-button {
+    background-color: #28a745; /* Green color for demo login */
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 5px;
+    margin-top: 10px;
+    cursor: pointer;
+    width: 100%; /* Make demo button fill the container */
+}
+
+.demo-login-button:hover {
+    background-color: #218838; /* Darker green on hover */
+}
+
+/* Close Button Styling */
+.close-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 1.6rem;
+    background: none;
+    border: none;
+    color: #333;
+    cursor: pointer;
+}
+
+.close-button:hover {
+    color: #007bff; /* Change color on hover */
+}
+
+/* Mobile Adjustments */
+@media (max-width: 768px) {
+    .modal-container {
+        width: 90%; /* Modal takes up more space on small screens */
+        padding: 20px;
+    }
+
+    .modal-header {
+        font-size: 1.6rem; /* Slightly smaller header for mobile */
+    }
+
+    .form-input {
+        font-size: 0.9rem; /* Smaller font size for inputs */
+        padding: 10px;
+    }
+}
+

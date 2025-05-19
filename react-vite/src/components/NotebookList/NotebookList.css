@@ -1,0 +1,88 @@
+/* Notebook List Container */
+.notebook-list-container {
+  padding: 1.5rem;
+  margin-top: 200px; /* Adjust for the navbar */
+}
+
+/* Notebook List Styling */
+.notebook-list {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* 4 notebooks per row */
+  gap: 3rem; /* Space between the notebooks */
+  padding: 1rem;
+}
+
+/* For smaller screens, make notebooks stack in a single column */
+@media (max-width: 1024px) {
+  .notebook-list {
+    grid-template-columns: repeat(2, 1fr); /* 2 notebooks per row */
+  }
+}
+
+@media (max-width: 768px) {
+  .notebook-list {
+    grid-template-columns: 1fr; /* 1 notebook per row */
+  }
+}
+
+/* Notebook Card Styling */
+.notebook-card {
+  width: 100%;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 1rem;
+  cursor: pointer;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  position: relative;
+  transition: all 0.3s ease-in-out;
+}
+
+/* Highlight selected notebook */
+.notebook-card.selected {
+  border: 2px solid #333;
+}
+
+/* Hover effect */
+.notebook-card:hover {
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+/* For images inside notebook cards */
+.notebook-image {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  margin-bottom: 0.5rem;
+  border-radius: 4px;
+}
+
+/* Notebook Card Titles and Descriptions */
+.notebook-card h3 {
+  margin-bottom: 0.5rem;
+}
+
+.notebook-card p {
+  color: #555;
+  font-size: 0.9rem;
+}
+
+/* Actions (Edit & Delete buttons) */
+.actions {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.delete-button {
+  font-size: 1.2rem;
+  color: #d9534f; /* Red color for delete button */
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.delete-button:hover {
+  color: #c9302c; /* Darker red on hover */
+}

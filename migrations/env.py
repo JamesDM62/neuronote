@@ -1,6 +1,5 @@
 import logging
 from logging.config import fileConfig
-from app.models import SCHEMA
 from sqlalchemy import text
 
 from alembic import context
@@ -8,7 +7,9 @@ from flask import current_app
 
 # Get SCHEMA from environment
 import os
-SCHEMA = os.getenv("SCHEMA") if os.getenv("ENV") == "production" else None
+environment = os.getenv("FLASK_ENV")
+SCHEMA = os.environ.get("SCHEMA")
+
 
 
 # this is the Alembic Config object, which provides
@@ -106,6 +107,9 @@ def run_migrations_online():
 
     with connectable.connect() as connection:
         print(f"=== SCHEMA IS: {SCHEMA} ===")
+        if SCHEMA is None:
+            raise Exception("SCHEMA is not set! Did you forget to define it in Render environment settings?")
+
 
         connection.execute(text(f"SET search_path TO {SCHEMA}")) 
         

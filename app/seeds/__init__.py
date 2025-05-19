@@ -6,7 +6,10 @@ from .tasks import seed_tasks, undo_tasks
 from .tags import seed_tags, undo_tags
 from .note_tags import seed_note_tags, undo_note_tags
 
-from app.models.db import db, environment, SCHEMA
+import os
+
+environment = os.getenv("FLASK_ENV")
+SCHEMA = os.environ.get("SCHEMA")
 
 # Creates a seed group to hold our commands
 # So we can type `flask seed --help`

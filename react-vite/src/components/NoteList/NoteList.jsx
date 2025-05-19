@@ -10,6 +10,7 @@ export default function NoteList() {
   const navigate = useNavigate();
   const location = useLocation();
 
+  const sessionUser = useSelector((state) => state.session.user);  // Access sessionUser from Redux store
   const reduxNotebookId = useSelector((state) => state.filters.notebookId);
   const notebookId = reduxNotebookId || location.state?.notebookId;
   const rawNotes = useSelector((state) => state.notes);
@@ -21,8 +22,10 @@ export default function NoteList() {
   }, [rawNotes, notebookId]);
 
   useEffect(() => {
-    if (notebookId) dispatch(thunkFetchNotes(notebookId));
-  }, [dispatch, notebookId]);
+    if (notebookId && sessionUser?.id) {
+      dispatch(thunkFetchNotes(notebookId, sessionUser.id));  // Pass sessionUser.id to fetch notes
+    }
+  }, [dispatch, notebookId, sessionUser?.id]);  // Only depend on notebookId and sessionUser.id
 
   const handleClick = (noteId) => {
     navigate(`/notes/${noteId}`);

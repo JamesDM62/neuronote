@@ -1,5 +1,5 @@
 /* Form Container */
-.create-notebook-form {
+/* .create-notebook-form {
     display: flex;
     flex-direction: column;
     align-items: stretch;
@@ -8,7 +8,7 @@
     background-color: #fff;
     border-radius: 8px;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-}
+} */
 
 /* Form Heading */
 .create-notebook-form h3 {

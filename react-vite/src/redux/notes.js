@@ -30,14 +30,14 @@ export const thunkFetchNote = (noteId) => async (dispatch) => {
     }
 };
 
-// Thunk: Fetch all notes for a specific notebook
-export const thunkFetchNotes = (notebookId, tagId) => async (dispatch) => {
+/// Thunk: Fetch all notes for a specific notebook or by tag
+export const thunkFetchNotes = (notebookId, tagId, userId) => async (dispatch) => {
     let url;
 
     if (notebookId) {
-        url = `/api/notebooks/${notebookId}/notes`;
+        url = `/api/notebooks/${notebookId}/notes?userId=${userId}`;  // Pass userId in the query string
     } else if (tagId) {
-        url = `/api/notes/by-tag/${tagId}`;
+        url = `/api/notes/by-tag/${tagId}?userId=${userId}`;  // Pass userId in the query string
     } else {
         console.error("thunkFetchNotes requires notebookId or tagId");
         return;

@@ -18,7 +18,7 @@ function LoginFormPage() {
     e.preventDefault();
 
     const serverResponse = await dispatch(
-      thunkLogin({ credential: email, password })
+      thunkLogin({ credential: email, password})
     );
 
     if (serverResponse) {

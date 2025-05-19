@@ -1,7 +1,7 @@
 """add user_id to tags
 
 Revision ID: b6b9e57e9928
-Revises: ca1b650c71db
+Revises: forced_reset_1
 Create Date: 2025-05-15 21:22:53.457108
 """
 from alembic import op
@@ -11,7 +11,7 @@ import os
 
 # revision identifiers, used by Alembic.
 revision = 'b6b9e57e9928'
-down_revision = 'ca1b650c71db'
+down_revision = 'forced_reset_1'
 branch_labels = None
 depends_on = None
 

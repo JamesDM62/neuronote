@@ -79,7 +79,9 @@ def run_migrations_online():
                 raise Exception("SCHEMA is not set! Did you forget to define it in Render environment settings?")
 
             if environment == "production":
+                connection.execute(text(f"CREATE SCHEMA IF NOT EXISTS {SCHEMA}"))
                 connection.execute(text(f"SET search_path TO {SCHEMA}"))
+
 
             context.configure(
                 connection=connection,

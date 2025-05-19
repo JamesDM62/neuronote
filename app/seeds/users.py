@@ -1,5 +1,8 @@
-from app.models import db, User, environment, SCHEMA
+from app.models import db, User, SCHEMA
 from sqlalchemy.sql import text
+import os
+
+environment = os.getenv("FLASK_ENV")
 
 demo_id = None
 marnie_id = None
@@ -11,7 +14,7 @@ def seed_users():
 
     if environment == "production":
         db.session.execute(text(f"SET search_path TO {SCHEMA}"))
-        
+
     demo = User(
         username='Demo',
         first_name='Demo',

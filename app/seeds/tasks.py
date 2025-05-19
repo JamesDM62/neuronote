@@ -1,5 +1,8 @@
-from app.models import db, Task, environment, SCHEMA
+from app.models import db, Task, SCHEMA
 from sqlalchemy.sql import text
+import os
+
+environment = os.getenv("FLASK_ENV")
 
 def seed_tasks():
     

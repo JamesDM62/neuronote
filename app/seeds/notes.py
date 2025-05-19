@@ -1,5 +1,8 @@
-from app.models import db, Note, environment, SCHEMA
+from app.models import db, Note, SCHEMA
 from sqlalchemy.sql import text
+import os
+
+environment = os.getenv("FLASK_ENV")
 
 def seed_notes():
 

@@ -1,5 +1,8 @@
-from app.models import db, note_tags, environment, SCHEMA
+from app.models import db, note_tags, SCHEMA
 from sqlalchemy.sql import text
+import os
+
+environment = os.getenv("FLASK_ENV")
 
 def seed_note_tags():
 

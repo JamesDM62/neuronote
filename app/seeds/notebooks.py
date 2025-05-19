@@ -1,6 +1,9 @@
-from app.models import db, Notebook, environment, SCHEMA
+from app.models import db, Notebook, SCHEMA
 from .users import demo_id, marnie_id, bobbie_id
 from sqlalchemy.sql import text
+import os
+
+environment = os.getenv("FLASK_ENV")
 
 def seed_notebooks():
     

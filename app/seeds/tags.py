@@ -1,5 +1,8 @@
-from app.models import db, Tag, User, environment, SCHEMA
+from app.models import db, Tag, User, SCHEMA
 from sqlalchemy.sql import text
+import os
+
+environment = os.getenv("FLASK_ENV")
 
 def seed_tags():
 

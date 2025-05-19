@@ -1,5 +1,7 @@
 import logging
 from logging.config import fileConfig
+from app.models import SCHEMA
+from sqlalchemy import text
 
 from alembic import context
 from flask import current_app
@@ -103,6 +105,8 @@ def run_migrations_online():
     connectable = get_engine()
 
     with connectable.connect() as connection:
+        connection.execute(text(f"SET search_path TO {SCHEMA}")) 
+        
         context.configure(
             connection=connection,
             target_metadata=get_metadata(),

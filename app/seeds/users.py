@@ -1,9 +1,13 @@
 from app.models import db, User, environment, SCHEMA
 from sqlalchemy.sql import text
 
+demo_id = None
+marnie_id = None
+bobbie_id = None
 
 # Adds a demo user, you can add other users here if you want
 def seed_users():
+    global demo_id, marnie_id, bobbie_id
     demo = User(
         username='Demo',
         first_name='Demo',
@@ -30,6 +34,10 @@ def seed_users():
     db.session.add(marnie)
     db.session.add(bobbie)
     db.session.commit()
+
+    demo_id = demo.id
+    marnie_id = marnie.id
+    bobbie_id = bobbie.id
 
 
 # Uses a raw SQL query to TRUNCATE or DELETE the users table. SQLAlchemy doesn't

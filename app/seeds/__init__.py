@@ -23,6 +23,12 @@ def seed():
         # Make sure to add all your other model's undo functions below
         undo_users()
     seed_users()
+    from .users import demo_id, marnie_id, bobbie_id
+    from app.models import Notebook
+
+    Notebook.demo_id = demo_id
+    Notebook.marnie_id = marnie_id
+    Notebook.bobbie_id = bobbie_id
     # Add other seed functions here
     seed_notebooks()
     seed_notes()

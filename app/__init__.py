@@ -14,8 +14,12 @@ from .api.tag_routes import tag_routes
 from .api.session_routes import session_routes
 from .seeds import seed_commands
 from .config import Config
+from datetime import timedelta
 
 app = Flask(__name__, static_folder='../react-vite/dist', static_url_path='/')
+
+# Session expiration setting
+app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(days=7) 
 
 # Setup login manager
 login = LoginManager(app)

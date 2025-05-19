@@ -16,9 +16,10 @@ class Tag(db.Model):
 
     notes = relationship(
         'Note',
-        secondary=add_prefix_for_prod('note_tags'),
+        secondary=note_tags,
         back_populates='tags'
     )
+
 
     def to_dict(self):
         return {

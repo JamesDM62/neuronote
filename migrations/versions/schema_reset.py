@@ -1,17 +1,16 @@
-"""Initial full schema
+"""schema-aware reset
 
-Revision ID: forced_reset_1
-Revises: 
-Create Date: 2025-04-30 14:00:34.992916
+Revision ID: schema_reset
+Revises:
+Create Date: 2025-05-19 XX:XX:XX.XXXXX
 """
 
 from alembic import op
 import sqlalchemy as sa
-from flask import current_app
 import os
 
 # revision identifiers, used by Alembic.
-revision = 'forced_reset_1'
+revision = 'schema_reset'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -19,15 +18,15 @@ depends_on = None
 
 def upgrade():
     env = os.getenv("FLASK_ENV")
-    schema = os.getenv("SCHEMA") if env == "production" else None
+    SCHEMA = os.getenv("SCHEMA") if env == "production" else None
 
-    # Tags table
+    # Tags table (created first because foreign key added later)
     op.create_table('tags',
         sa.Column('id', sa.Integer(), nullable=False),
         sa.Column('name', sa.String(length=50), nullable=False),
         sa.PrimaryKeyConstraint('id'),
         sa.UniqueConstraint('name'),
-        schema=schema
+        schema=SCHEMA
     )
 
     # Users table
@@ -42,7 +41,7 @@ def upgrade():
         sa.PrimaryKeyConstraint('id'),
         sa.UniqueConstraint('email'),
         sa.UniqueConstraint('username'),
-        schema=schema
+        schema=SCHEMA
     )
 
     # Notebooks table
@@ -54,9 +53,9 @@ def upgrade():
         sa.Column('image_url', sa.String(length=255), nullable=False),
         sa.Column('created_at', sa.DateTime(), nullable=True),
         sa.Column('updated_at', sa.DateTime(), nullable=True),
-        sa.ForeignKeyConstraint(['user_id'], [f'{schema}.users.id'] if schema else ['users.id']),
+        sa.ForeignKeyConstraint(['user_id'], [f'{SCHEMA}.users.id'] if SCHEMA else ['users.id']),
         sa.PrimaryKeyConstraint('id'),
-        schema=schema
+        schema=SCHEMA
     )
 
     # Tasks table
@@ -68,9 +67,9 @@ def upgrade():
         sa.Column('is_complete', sa.Boolean(), nullable=False),
         sa.Column('created_at', sa.DateTime(), nullable=True),
         sa.Column('updated_at', sa.DateTime(), nullable=True),
-        sa.ForeignKeyConstraint(['user_id'], [f'{schema}.users.id'] if schema else ['users.id']),
+        sa.ForeignKeyConstraint(['user_id'], [f'{SCHEMA}.users.id'] if SCHEMA else ['users.id']),
         sa.PrimaryKeyConstraint('id'),
-        schema=schema
+        schema=SCHEMA
     )
 
     # Notes table
@@ -82,32 +81,51 @@ def upgrade():
         sa.Column('content', sa.Text(), nullable=True),
         sa.Column('created_at', sa.DateTime(), nullable=True),
         sa.Column('updated_at', sa.DateTime(), nullable=True),
-        sa.ForeignKeyConstraint(['notebook_id'], [f'{schema}.notebooks.id'] if schema else ['notebooks.id']),
-        sa.ForeignKeyConstraint(['user_id'], [f'{schema}.users.id'] if schema else ['users.id']),
+        sa.ForeignKeyConstraint(['notebook_id'], [f'{SCHEMA}.notebooks.id'] if SCHEMA else ['notebooks.id']),
+        sa.ForeignKeyConstraint(['user_id'], [f'{SCHEMA}.users.id'] if SCHEMA else ['users.id']),
         sa.PrimaryKeyConstraint('id'),
-        schema=schema
+        schema=SCHEMA
     )
 
-    # Note-Tags junction table
+    # Note-Tags table
     op.create_table('note_tags',
         sa.Column('note_id', sa.Integer(), nullable=False),
         sa.Column('tag_id', sa.Integer(), nullable=False),
-        sa.ForeignKeyConstraint(['note_id'], [f'{schema}.notes.id'] if schema else ['notes.id']),
-        sa.ForeignKeyConstraint(['tag_id'], [f'{schema}.tags.id'] if schema else ['tags.id']),
+        sa.ForeignKeyConstraint(['note_id'], [f'{SCHEMA}.notes.id'] if SCHEMA else ['notes.id']),
+        sa.ForeignKeyConstraint(['tag_id'], [f'{SCHEMA}.tags.id'] if SCHEMA else ['tags.id']),
         sa.PrimaryKeyConstraint('note_id', 'tag_id'),
-        schema=schema
+        schema=SCHEMA
     )
+
+    # Add user_id to tags (as nullable first)
+    with op.batch_alter_table('tags', schema=SCHEMA) as batch_op:
+        batch_op.add_column(sa.Column('user_id', sa.Integer(), nullable=True))
+        batch_op.create_foreign_key(
+            'fk_tags_user_id_users',
+            'users',
+            ['user_id'], ['id'],
+            ondelete='CASCADE'
+        )
+
+    # Backfill user_id in tags (assume ID 1 is valid)
+    op.execute("UPDATE {}tags SET user_id = 1 WHERE user_id IS NULL;".format(f"{SCHEMA}." if SCHEMA else ""))
+
+    # Then set user_id to NOT NULL
+    with op.batch_alter_table('tags', schema=SCHEMA) as batch_op:
+        batch_op.alter_column('user_id', nullable=False)
 
 
 def downgrade():
     env = os.getenv("FLASK_ENV")
-    schema = os.getenv("SCHEMA") if env == "production" else None
+    SCHEMA = os.getenv("SCHEMA") if env == "production" else None
 
-    op.drop_table('note_tags', schema=schema)
-    op.drop_table('notes', schema=schema)
-    op.drop_table('tasks', schema=schema)
-    op.drop_table('notebooks', schema=schema)
-    op.drop_table('users', schema=schema)
-    op.drop_table('tags', schema=schema)
+    with op.batch_alter_table('tags', schema=SCHEMA) as batch_op:
+        batch_op.drop_constraint('fk_tags_user_id_users', type_='foreignkey')
+        batch_op.drop_column('user_id')
 
-
+    op.drop_table('note_tags', schema=SCHEMA)
+    op.drop_table('notes', schema=SCHEMA)
+    op.drop_table('tasks', schema=SCHEMA)
+    op.drop_table('notebooks', schema=SCHEMA)
+    op.drop_table('users', schema=SCHEMA)
+    op.drop_table('tags', schema=SCHEMA)

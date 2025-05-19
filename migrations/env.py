@@ -105,6 +105,8 @@ def run_migrations_online():
     connectable = get_engine()
 
     with connectable.connect() as connection:
+        print(f"=== SCHEMA IS: {SCHEMA} ===")
+
         connection.execute(text(f"SET search_path TO {SCHEMA}")) 
         
         context.configure(

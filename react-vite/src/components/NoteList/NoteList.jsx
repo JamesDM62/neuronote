@@ -17,7 +17,7 @@ export default function NoteList() {
 
   const notes = useMemo(() => {
     return Object.values(rawNotes).filter(
-      (note) => note.notebookId === notebookId 
+      (note) => note.notebookId === notebookId
     );
   }, [rawNotes, notebookId]);
 
@@ -49,8 +49,13 @@ export default function NoteList() {
       ) : (
         <ul>
           {notes.map((note) => (
-            <li key={note.id} onClick={() => handleClick(note.id)}>
-              {note.title}
+            <li key={note.id}>
+              <span
+                onClick={() => handleClick(note.id)}
+                className="note-link"
+              >
+                {note.title}
+              </span>
             </li>
           ))}
         </ul>

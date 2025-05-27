@@ -2,3 +2,24 @@
 .notes-page-container {
     padding-top: 5rem; /* Adjust this value to match the height of your navbar */
 }
+
+.notes-page-container h3 {
+    color: #00C4EE;
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.notes-page-container p {
+    font-size: 1.2rem;
+}
+
+.note-link {
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.note-link:hover {
+  text-decoration: underline;
+  color: #00C4EE;
+}
+

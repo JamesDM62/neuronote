@@ -10,9 +10,10 @@ import { setNotebookFilter } from "../../redux/noteFilters";
 import CreateNotebookForm from "../CreateNotebookForm/CreateNotebookForm";
 import OpenModalButton from "../OpenModalButton";
 import EditNotebookModal from "../EditNotebookModal/EditNotebookModal";
+import BackgroundMedia from "../BackgroundMedia/BackgroundMedia";
 import './NotebookList.css'; // Ensure the CSS file is correctly linked
 
-export default function NotebookList() {
+export default function NotebookList({ pageLayout = false }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const user = useSelector((state) => state.session.user);
@@ -44,12 +45,14 @@ export default function NotebookList() {
     }
   };
 
-  return (
-    <div className="notebook-list-container">
-      <h2>My Notebooks</h2>
+  const notebookListContent = (
+    <>
+      <h2 className="text-3xl font-bold text-primary mb-4">My Notebooks</h2>
+
       <OpenModalButton
         buttonText="+ Create Notebook"
         modalComponent={<CreateNotebookForm />}
+        className="text-lg text-secondary hover:text-primary hover:underline font-semibold"
       />
 
       <div className="notebook-list">
@@ -77,12 +80,39 @@ export default function NotebookList() {
               <OpenModalButton
                 buttonText="✏️"
                 modalComponent={<EditNotebookModal notebook={notebook} />}
+                onButtonClick={(e) => e?.stopPropagation()}
               />
-              <button onClick={() => handleDelete(notebook.id)} className="delete-button">🗑</button>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleDelete(notebook.id);
+                }}
+                className="delete-button"
+              >
+                🗑
+              </button>
             </div>
           </div>
         ))}
       </div>
-    </div>
+    </>
   );
+
+  if (pageLayout) {
+    return (
+      <div className="relative min-h-screen">
+        <BackgroundMedia
+          src="/20250526_2007_Vibrant Brain Signals_simple_compose_01jw7mfvcged389phmbbecaz7g.mp4"
+          type="video"
+        />
+        <div className="fixed top-0 left-0 w-full h-full bg-black/60 z-[-5]" />
+        <div className="notebook-list-container relative z-10">
+          {notebookListContent}
+        </div>
+      </div>
+    );
+  }
+
+  return <div className="notebook-list-container">{notebookListContent}</div>;
 }
+

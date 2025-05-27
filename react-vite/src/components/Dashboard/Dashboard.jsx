@@ -18,7 +18,7 @@ export default function Dashboard() {
       <div className="dashboard-layout relative z-10">
         <main className="dashboard-main">
           <h2>{user.first_name}&apos;s Workspace</h2>
-          <NotebookList />
+          <NotebookList enableDoubleClickNav={true}/>
           <NoteList />
         </main>
       </div>

@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { thunkFetchNotes } from "../../redux/notes";
 import { useNavigate } from "react-router-dom";
@@ -13,24 +13,37 @@ import EditNotebookModal from "../EditNotebookModal/EditNotebookModal";
 import BackgroundMedia from "../BackgroundMedia/BackgroundMedia";
 import './NotebookList.css'; // Ensure the CSS file is correctly linked
 
-export default function NotebookList({ pageLayout = false }) {
+export default function NotebookList({ pageLayout = false, enableDoubleClickNav = false }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const user = useSelector((state) => state.session.user);
   const notebookObj = useSelector((state) => state.notebooks);
   const notebooks = useMemo(() => Object.values(notebookObj), [notebookObj]);
   const selectedNotebookId = useSelector((state) => state.filters.notebookId);
+  const [lastClickedId, setLastClickedId] = useState(null);
 
   useEffect(() => {
     if (!user) return;
     dispatch(thunkFetchNotebooks());
   }, [dispatch, user]);
 
-  const handleSelect = (notebookId) => {
+  useEffect(() => {
+    if (enableDoubleClickNav && selectedNotebookId !== lastClickedId) {
+      setLastClickedId(null);
+    }
+  }, [selectedNotebookId, enableDoubleClickNav, lastClickedId]);
+
+  const handleNotebookClick = (notebookId) => {
+    if (enableDoubleClickNav && lastClickedId === notebookId) {
+      navigate("/notes", { state: { notebookId } });
+      return;
+    }
+
+    setLastClickedId(notebookId);
     dispatch(setNotebookFilter(notebookId));
     dispatch(thunkFetchNotes(notebookId));
-    navigate("/notes", { state: { notebookId } });
   };
+
 
   const handleDelete = async (notebookId) => {
     const confirmed = confirm("Delete this notebook?");
@@ -59,7 +72,7 @@ export default function NotebookList({ pageLayout = false }) {
         {notebooks.map((notebook) => (
           <div
             key={notebook.id}
-            onClick={() => handleSelect(notebook.id)}
+            onClick={() => handleNotebookClick(notebook.id)}
             className={`notebook-card ${selectedNotebookId === notebook.id ? "selected" : ""}`}
           >
             {notebook.imageUrl && (

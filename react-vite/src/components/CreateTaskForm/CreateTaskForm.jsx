@@ -31,22 +31,38 @@ export default function CreateTaskForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="create-task-form">
-      <h2>Create Task</h2>
-      {errors.title && <p className="error">{errors.title}</p>}
+    <form
+      onSubmit={handleSubmit}
+      className="space-y-4 w-full"
+    >
+      <h2 className="text-xl font-semibold">Create Task</h2>
+
+      {errors.title && (
+        <p className="text-red-500 text-sm">{errors.title}</p>
+      )}
+
       <input
         type="text"
         value={title}
         placeholder="Task title"
         onChange={(e) => setTitle(e.target.value)}
         required
+        className="w-full border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-[#41E296]"
       />
+
       <textarea
         value={description}
         placeholder="Description (optional)"
         onChange={(e) => setDescription(e.target.value)}
+        className="w-full border border-gray-300 p-2 rounded focus:outline-none focus:ring-2 focus:ring-[#41E296] resize-none"
       />
-      <button type="submit">Create Task</button>
+
+      <button
+        type="submit"
+        className="w-full bg-[#41E296] text-white py-2 rounded shadow-md hover:bg-[#3ad18a] hover:shadow-lg transition-shadow"
+      >
+        Create Task
+      </button>
     </form>
   );
 }

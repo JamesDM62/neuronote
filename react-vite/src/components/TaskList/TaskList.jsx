@@ -7,7 +7,6 @@ import {
 } from "../../redux/tasks";
 import OpenModalButton from "../OpenModalButton";
 import CreateTaskForm from "../CreateTaskForm/CreateTaskForm";
-import './TaskList.css'
 
 export default function TaskList() {
   const dispatch = useDispatch();
@@ -49,99 +48,115 @@ export default function TaskList() {
   };
 
   return (
-    <div className="task-list" style={{ maxWidth: "600px", margin: "0 auto", paddingTop: "8rem", }}>
-      <h1>My Tasks</h1>
-      <OpenModalButton
-        buttonText="+ New Task"
-        modalComponent={<CreateTaskForm />}
-      />
+    <div className="min-h-screen bg-gradient-to-br from-[#41E296]/30 via-white to-[#00C4EE]/30 p-6">
+      <div className="max-w-2xl mx-auto bg-white/70 backdrop-blur-md p-6 rounded-xl shadow-lg">
+        <h1 className="text-2xl font-bold mb-4">My Tasks</h1>
 
-      {taskList.length === 0 ? (
-        <p>No tasks found.</p>
-      ) : (
-        <ul style={{ paddingLeft: 0 }}>
-          {taskList.map((task) => {
-            const isEditing = editingTaskId === task.id;
-            return (
-              <li
-                key={task.id}
-                style={{
-                  listStyle: "none",
-                  marginBottom: "1.5rem",
-                  border: "1px solid #ccc",
-                  padding: "1rem",
-                  borderRadius: "8px",
-                  boxShadow: "0 1px 3px rgba(0,0,0,0.1)",
-                }}
-              >
-                <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-                  <input
-                    type="checkbox"
-                    checked={task.isComplete}
-                    onChange={() => handleToggleComplete(task)}
-                    id={`complete-${task.id}`}
-                  />
-                  <label htmlFor={`complete-${task.id}`}>
-                    {task.isComplete ? "Complete" : "Incomplete"}
-                  </label>
-                  {isEditing ? (
+        <OpenModalButton
+          buttonText="+ New Task"
+          modalComponent={<CreateTaskForm />}
+          className="mb-6 bg-[#41E296] text-white px-4 py-2 rounded shadow-md hover:bg-[#3ad18a] hover:shadow-lg transition-shadow"
+        />
+
+        {taskList.length === 0 ? (
+          <p>No tasks found.</p>
+        ) : (
+          <ul className="space-y-4">
+            {taskList.map((task) => {
+              const isEditing = editingTaskId === task.id;
+              return (
+                <li
+                  key={task.id}
+                  className="border border-gray-300 p-4 rounded-lg shadow-md bg-white"
+                >
+                  <div className="flex items-center gap-2">
                     <input
-                      value={editData.title}
-                      onChange={(e) =>
-                        setEditData((prev) => ({
-                          ...prev,
-                          title: e.target.value,
-                        }))
-                      }
-                      style={{ flexGrow: 1 }}
+                      type="checkbox"
+                      checked={task.isComplete}
+                      onChange={() => handleToggleComplete(task)}
+                      id={`complete-${task.id}`}
                     />
-                  ) : (
-                    <h3
-                      onClick={() => handleEditClick(task)}
-                      style={{ margin: 0, cursor: "pointer", flexGrow: 1 }}
-                    >
-                      {task.title}
-                    </h3>
-                  )}
-                  <button onClick={() => handleDelete(task.id)}>🗑</button>
-                </div>
+                    <label htmlFor={`complete-${task.id}`} className="text-sm">
+                      {task.isComplete ? "Complete" : "Incomplete"}
+                    </label>
 
-                <div style={{ marginTop: "0.5rem" }}>
-                  {isEditing ? (
-                    <textarea
-                      value={editData.description}
-                      onChange={(e) =>
-                        setEditData((prev) => ({
-                          ...prev,
-                          description: e.target.value,
-                        }))
-                      }
-                      style={{ width: "100%" }}
-                    />
-                  ) : task.description ? (
-                    <p
-                      onClick={() => handleEditClick(task)}
-                      style={{ cursor: "pointer", marginTop: "0.5rem" }}
-                    >
-                      {task.description}
-                    </p>
-                  ) : null}
-                </div>
+                    {isEditing ? (
+                      <input
+                        value={editData.title}
+                        onChange={(e) =>
+                          setEditData((prev) => ({
+                            ...prev,
+                            title: e.target.value,
+                          }))
+                        }
+                        className="flex-grow px-2 py-1 border rounded"
+                      />
+                    ) : (
+                      <h3
+                        onClick={() => handleEditClick(task)}
+                        className="cursor-pointer flex-grow font-semibold"
+                      >
+                        {task.title}
+                      </h3>
+                    )}
 
-                {isEditing && (
-                  <div style={{ marginTop: "0.5rem" }}>
-                    <button onClick={() => handleSave(task.id)}>💾 Save</button>{" "}
-                    <button onClick={() => setEditingTaskId(null)}>❌ Cancel</button>
+                    <button
+                      onClick={() => handleDelete(task.id)}
+                      className="text-red-500 hover:text-red-700"
+                      title="Delete task"
+                    >
+                      🗑
+                    </button>
                   </div>
-                )}
-              </li>
-            );
-          })}
-        </ul>
-      )}
+
+                  <div className="mt-2">
+                    {isEditing ? (
+                      <textarea
+                        value={editData.description}
+                        onChange={(e) =>
+                          setEditData((prev) => ({
+                            ...prev,
+                            description: e.target.value,
+                          }))
+                        }
+                        className="w-full border p-2 rounded"
+                      />
+                    ) : task.description ? (
+                      <p
+                        onClick={() => handleEditClick(task)}
+                        className="cursor-pointer mt-1 text-sm"
+                      >
+                        {task.description}
+                      </p>
+                    ) : null}
+                  </div>
+
+                  {isEditing && (
+                    <div className="mt-2 flex gap-2">
+                      <button
+                        onClick={() => handleSave(task.id)}
+                        className="bg-[#41E296] text-white px-3 py-1 rounded shadow-md hover:bg-[#3ad18a] hover:shadow-lg transition-shadow"
+                      >
+                        💾 Save
+                      </button>
+                      <button
+                        onClick={() => setEditingTaskId(null)}
+                        className="border border-gray-400 px-3 py-1 rounded hover:bg-gray-100"
+                      >
+                        ❌ Cancel
+                      </button>
+                    </div>
+                  )}
+                </li>
+              );
+            })}
+          </ul>
+        )}
+      </div>
     </div>
   );
 }
+
 
 
 

@@ -110,32 +110,44 @@
 }
 
 
-/* Mobile Adjustments */
+/* Responsive tweaks (safe to add at end) */
 @media (max-width: 1024px) {
-    .nav-bar {
-        flex-direction: column; /* Stack items vertically on small screens */
-        align-items: center; /* Center all navbar items */
-    }
-    .nav-left {
-        justify-content: center; /* Ensure items are centered */
-        margin-top: 10px; /* Add space from the navbar */
-    }
-    .nav-left button {
-        margin-top: 10px; /* Add space between button and links */
-    }
+  .nav-bar {
+    flex-wrap: wrap;
+    height: auto;
+    padding: 10px 20px;
+  }
+
+  .nav-left {
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .nav-left a {
+    margin: 6px 0;
+  }
+
+  .logo-img {
+    height: 200px;
+  }
+
+  .profile-dropdown {
+    top: 100px;
+  }
 }
 
 @media (max-width: 768px) {
-    .nav-bar {
-        flex-direction: column;
-        align-items: center;
-    }
-    .nav-left {
-        justify-content: center;
-        margin-top: 10px;
-    }
-    .nav-left button {
-        margin-top: 10px;
-    }
+  .logo-img {
+    height: 160px;
+  }
+
+  .nav-left {
+    gap: 8px;
+  }
+
+  .nav-left a {
+    font-size: 1rem;
+  }
 }
 

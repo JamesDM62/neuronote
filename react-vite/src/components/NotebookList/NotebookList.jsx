@@ -39,11 +39,17 @@ export default function NotebookList({ pageLayout = false, enableDoubleClickNav 
       return;
     }
 
+    if (pageLayout) {
+      dispatch(setNotebookFilter(notebookId));
+      dispatch(thunkFetchNotes(notebookId));
+      navigate("/notes", { state: { notebookId } });
+      return;
+    }
+
     setLastClickedId(notebookId);
     dispatch(setNotebookFilter(notebookId));
     dispatch(thunkFetchNotes(notebookId));
   };
-
 
   const handleDelete = async (notebookId) => {
     const confirmed = confirm("Delete this notebook?");

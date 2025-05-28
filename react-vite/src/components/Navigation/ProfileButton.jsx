@@ -41,7 +41,7 @@ function ProfileButton() {
     await dispatch(thunkLogout());
     closeMenu();
   };
-  
+
 
   return (
     <>
@@ -63,12 +63,20 @@ function ProfileButton() {
           ) : (
             <>
               <OpenModalMenuItem
-                itemText="Log In"
+                itemText={
+                  <span className="text-base font-medium hover:text-[#41E296] hover:underline cursor-pointer transition">
+                    Log In
+                  </span>
+                }
                 onItemClick={closeMenu}
                 modalComponent={<LoginFormModal />}
               />
               <OpenModalMenuItem
-                itemText="Sign Up"
+                itemText={
+                  <span className="text-base font-medium hover:text-[#41E296] hover:underline cursor-pointer transition">
+                    Sign Up
+                  </span>
+                }
                 onItemClick={closeMenu}
                 modalComponent={<SignupFormModal />}
               />

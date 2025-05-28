@@ -102,7 +102,12 @@ function SignupFormModal() {
           </label>
           {errors.confirmPassword && <p className="error-message">{errors.confirmPassword}</p>}
 
-          <button type="submit" className="signup-button">Sign Up</button>
+          <button
+            type="submit"
+            className="w-[80%] mx-auto block bg-[#41E296] text-white font-bold py-2 px-4 rounded-md shadow-xl hover:bg-[#32c283] border-2 border-black transition duration-300 mt-6"
+          >
+            Sign Up
+          </button>
         </form>
       </div>
     </div>

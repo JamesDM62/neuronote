@@ -65,7 +65,7 @@ export default function NoteList() {
               <li key={note.id}>
                 <span
                   onClick={() => handleClick(note.id)}
-                  className="cursor-pointer text-blue-700 hover:underline"
+                  className="cursor-pointer text-[#00C4EE] hover:underline"
                 >
                   {note.title}
                 </span>

@@ -49,7 +49,10 @@ function ProfileButton() {
         <FaUserCircle />
       </button>
       {showMenu && (
-        <ul className={"profile-dropdown"} ref={ulRef}>
+        <ul
+          ref={ulRef}
+          className="fixed top-[80px] right-[10px] bg-white border border-gray-300 shadow-md list-none p-3 text-base w-[400px] max-w-[100vw] max-h-[60vh] overflow-y-auto box-border rounded-lg z-[1000]"
+        >
           {user ? (
             <>
               <li><strong>{user.username}</strong></li>
@@ -58,13 +61,25 @@ function ProfileButton() {
               <li><button onClick={() => { navigate('/notes'); closeMenu(); }}>My Notes</button></li>
               <li><button onClick={() => { navigate('/notebooks'); closeMenu(); }}>My Notebooks</button></li>
               <li><button onClick={() => { navigate('/tasks'); closeMenu(); }}>My Tasks</button></li>
-              <li><button onClick={logout}>Log Out</button></li>
+              <li className="flex justify-center">
+                <button
+                  onClick={logout}
+                  className="w-4/5 px-4 py-2 bg-white text-[#41E296] border-2 shadow-lg font-semibold hover:bg-[#41E296]/10 transition"
+                  style={{
+                    border: '2px solid #41E296',
+                    borderRadius: '6px',
+                    boxShadow: '0 4px 8px rgba(0,0,0,0.15)',
+                  }}
+                >
+                  Log Out
+                </button>
+              </li>
             </>
           ) : (
             <>
               <OpenModalMenuItem
                 itemText={
-                  <span className="text-base font-medium hover:text-[#41E296] hover:underline cursor-pointer transition">
+                  <span className="text-base font-medium hover:text-[#00C4EE] hover:underline cursor-pointer transition">
                     Log In
                   </span>
                 }

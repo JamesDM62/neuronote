@@ -52,7 +52,7 @@ export function Modal() {
         {modalContent}
       </div>
     </div>,
-    modalRef.current
+    document.getElementById('modal-root')
   );
 }
 

@@ -16,13 +16,19 @@ export const thunkRestoreUser = () => async (dispatch) => {
   const response = await fetch('/api/session', {
     credentials: 'include'
   });
+
   if (response.ok) {
     const data = await response.json();
-    dispatch(setUser(data.user));
+    if (data && data.id) {
+      dispatch(setUser(data));
+    } else {
+      dispatch(removeUser()); // user is null or invalid
+    }
   } else {
-    dispatch(removeUser());
+    dispatch(removeUser()); // request failed entirely
   }
 };
+
 
 
 export const thunkLogin = (credentials) => async (dispatch) => {

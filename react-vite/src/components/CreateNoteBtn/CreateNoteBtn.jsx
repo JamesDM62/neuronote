@@ -17,7 +17,7 @@ export default function CreateNoteBtn() {
     if (newNote?.id) navigate(`/notes/${newNote.id}`);
   };
 
-  return <button onClick={handleCreate}>+ New Note</button>;
+  return <button onClick={handleCreate} className="text-[#00C4EE] font-semibold text-lg hover:underline hover:text-[#41E296]">+ New Note</button>;
 }
 
 

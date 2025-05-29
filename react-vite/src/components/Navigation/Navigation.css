@@ -48,7 +48,7 @@
 }
 
 .nav-left a:hover {
-    color: #007bff;
+    color: #00C4EE;
 }
 
 /* Profile Button Styling (FaUserCircle Icon) */
@@ -75,7 +75,7 @@
   top: 80px;            /* Adjust based on navbar height */
   right: 10px;        /* Ensures there's a small gap from the right side */
   background-color: white;
-  border: 1px solid #ccc;
+  /* border: 1px solid #ccc; */
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   list-style: none;
   padding: 10px;
@@ -90,52 +90,51 @@
 
 
 
-.profile-dropdown li button {
-  width: 55%;
-  padding: 8px 16px;           /* Space around the text inside the button */
-  background-color: #f0f0f0;   /* Light gray background */
-  border: 1px solid #ccc;      /* Light gray border */
-  border-radius: 4px;          /* Rounded corners */
-  color: #333;                 /* Dark text color */
-  text-align: left;             /* Align text to the left */
-  cursor: pointer;             /* Pointer cursor on hover */
-  transition: background-color 0.3s ease; /* Smooth hover effect */
-  font-size: 1rem; 
-  white-space: nowrap;   
-  margin: 10px;          /* Font size of the button text */
-}
+
 
 .profile-dropdown li button:hover {
   background-color: #e0e0e0;   /* Slightly darker gray on hover */
 }
 
 
-/* Mobile Adjustments */
+/* Responsive tweaks (safe to add at end) */
 @media (max-width: 1024px) {
-    .nav-bar {
-        flex-direction: column; /* Stack items vertically on small screens */
-        align-items: center; /* Center all navbar items */
-    }
-    .nav-left {
-        justify-content: center; /* Ensure items are centered */
-        margin-top: 10px; /* Add space from the navbar */
-    }
-    .nav-left button {
-        margin-top: 10px; /* Add space between button and links */
-    }
+  .nav-bar {
+    flex-wrap: wrap;
+    height: auto;
+    padding: 10px 20px;
+  }
+
+  .nav-left {
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .nav-left a {
+    margin: 6px 0;
+  }
+
+  .logo-img {
+    height: 200px;
+  }
+
+  .profile-dropdown {
+    top: 100px;
+  }
 }
 
 @media (max-width: 768px) {
-    .nav-bar {
-        flex-direction: column;
-        align-items: center;
-    }
-    .nav-left {
-        justify-content: center;
-        margin-top: 10px;
-    }
-    .nav-left button {
-        margin-top: 10px;
-    }
+  .logo-img {
+    height: 160px;
+  }
+
+  .nav-left {
+    gap: 8px;
+  }
+
+  .nav-left a {
+    font-size: 1rem;
+  }
 }
 

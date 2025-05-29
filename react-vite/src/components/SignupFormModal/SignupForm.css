@@ -30,6 +30,7 @@
     margin-bottom: 20px;
     text-align: center;
     color: #333;
+    font-weight: bold;
 }
 
 /* Form Styling */
@@ -50,10 +51,11 @@
     font-size: 1rem;
     padding: 12px;
     margin-bottom: 15px;
-    border: 1px solid #ccc;
+    border: 2px solid #030000;
     border-radius: 6px;
     transition: border-color 0.3s ease;
-    width: 90%;
+    display: block;
+    width: calc(100% - 40px); /* Consistent with modal padding */
     margin: 0 auto;
 }
 

@@ -8,9 +8,7 @@ import {
   thunkDeleteTagFromNote,
   thunkDeleteNote,
 } from "../../redux/notes";
-
 import { thunkFetchNoteTags } from "../../redux/tags";
-import "./NoteEditor.css";
 
 export default function NoteEditor() {
   const { noteId } = useParams();
@@ -19,20 +17,16 @@ export default function NoteEditor() {
   const [newTagName, setNewTagName] = useState("");
 
   const note = useSelector((state) => state.notes[noteId]);
-  // const allTagsObj = useSelector((state) => state.tags);
-  // const tagList = useMemo(() => Object.values(allTagsObj), [allTagsObj]);
 
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const autosaveTimeout = useRef(null);
 
-  // Fetch the note and all tags when the component mounts
   useEffect(() => {
     dispatch(thunkFetchNote(noteId));
     dispatch(thunkFetchNoteTags(noteId));
   }, [dispatch, noteId]);
 
-  // Populate title/content when note is loaded
   useEffect(() => {
     if (note) {
       setTitle(note.title || "");
@@ -40,13 +34,10 @@ export default function NoteEditor() {
     }
   }, [note]);
 
-  // Autosave note when title/content change
   useEffect(() => {
     if (!note) return;
 
-    if (autosaveTimeout.current) {
-      clearTimeout(autosaveTimeout.current);
-    }
+    if (autosaveTimeout.current) clearTimeout(autosaveTimeout.current);
 
     if (title !== note.title || content !== note.content) {
       autosaveTimeout.current = setTimeout(() => {
@@ -60,8 +51,6 @@ export default function NoteEditor() {
     };
   }, [title, content, dispatch, noteId, note]);
 
-
-
   const handleDelete = async () => {
     const confirmed = window.confirm("Are you sure you want to delete this note?");
     if (!confirmed) return;
@@ -70,75 +59,87 @@ export default function NoteEditor() {
     navigate("/notes");
   };
 
-  // const handleToggleTag = (tag) => {
-  //   const isAssigned = note?.tags?.some((t) => t.id === tag.id);
-  //   if (isAssigned) {
-  //     dispatch(thunkDeleteTagFromNote(note.id, tag.id));
-  //   }
-  // };
-
   if (!note) return <p>Loading note...</p>;
 
   return (
-    <div className="note-editor">
-      <div className="note-editor-controls" style={{ marginBottom: "0.5rem" }}>
-        <button onClick={handleDelete}>🗑 Delete Note</button>
-      </div>
+    <div className="min-h-screen bg-gradient-to-br from-[#41E296]/30 via-white to-[#00C4EE]/30 p-6">
+      <div className="max-w-3xl mx-auto bg-white/70 backdrop-blur-md p-6 rounded-xl shadow-lg">
+        <div className="flex justify-end gap-4 mb-4">
+          <button
+            onClick={() => navigate("/notes")}
+            className="bg-[#41E296] text-white px-4 py-2 rounded shadow-md hover:shadow-lg transition-shadow"
+          >
+            ✅ Done
+          </button>
+          <button
+            onClick={handleDelete}
+            className="bg-red-500 text-white px-4 py-2 rounded shadow-md hover:shadow-lg transition-shadow"
+          >
+            🗑 Delete
+          </button>
+        </div>
 
-      <input
-        className="note-title"
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
-        placeholder="Note title"
-      />
+        <input
+          className="w-full text-2xl font-semibold mb-4 border-b border-gray-300 bg-transparent focus:outline-none"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          placeholder="Note title"
+        />
 
-      <textarea
-        className="note-body"
-        value={content}
-        onChange={(e) => setContent(e.target.value)}
-        placeholder="Start typing your note..."
-      />
+        <textarea
+          className="w-full h-64 p-2 border rounded bg-white focus:outline-none resize-none"
+          value={content}
+          onChange={(e) => setContent(e.target.value)}
+          placeholder="Start typing your note..."
+        />
 
-      <div className="note-tags">
-        <h4>Tags</h4>
-        {note.tags?.length > 0 ? (
-          <ul style={{ listStyle: "none", paddingLeft: 0 }}>
-            {note.tags.map((tag) => (
-              <li key={tag.id}>
-                {tag.name}
-                <button
-                  onClick={() => dispatch(thunkDeleteTagFromNote(note.id, tag.id))}
-                  style={{ color: "red", marginLeft: "0.5rem" }}
-                  title="Delete tag"
-                >
-                  ❌
-                </button>
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <p>No tags on this note.</p>
-        )}
+        <div className="mt-6">
+          <h4 className="font-semibold">Tags</h4>
+          {note.tags?.length > 0 ? (
+            <ul className="list-none pl-0 mt-2">
+              {note.tags.map((tag) => (
+                <li key={tag.id} className="flex items-center">
+                  {tag.name}
+                  <button
+                    onClick={() =>
+                      dispatch(thunkDeleteTagFromNote(note.id, tag.id))
+                    }
+                    className="ml-2 text-red-500"
+                    title="Delete tag"
+                  >
+                    ❌
+                  </button>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p className="text-sm mt-2">No tags on this note.</p>
+          )}
 
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            if (!newTagName.trim()) return;
-            dispatch(thunkCreateAndAssignTag(note.id, newTagName.trim()));
-            setNewTagName("");
-          }}
-          style={{ marginTop: "1rem" }}
-        >
-          <input
-            type="text"
-            value={newTagName}
-            onChange={(e) => setNewTagName(e.target.value)}
-            placeholder="New tag name"
-            style={{ marginRight: "0.5rem" }}
-          />
-          <button type="submit">Add Tag</button>
-        </form>
-
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              if (!newTagName.trim()) return;
+              dispatch(thunkCreateAndAssignTag(note.id, newTagName.trim()));
+              setNewTagName("");
+            }}
+            className="mt-4 flex gap-2"
+          >
+            <input
+              type="text"
+              value={newTagName}
+              onChange={(e) => setNewTagName(e.target.value)}
+              placeholder="New tag name"
+              className="flex-1 border p-1 rounded"
+            />
+            <button
+              type="submit"
+              className="bg-[#41E296] text-white px-3 py-1 rounded shadow md hover:shadow-lg transition-shadow bg-[#3ad18a]"
+            >
+              Add Tag
+            </button>
+          </form>
+        </div>
       </div>
     </div>
   );

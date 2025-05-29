@@ -46,7 +46,7 @@ export const router = createBrowserRouter([
         path: "notebooks",
         element: (
           <ProtectedRoute>
-            <NotebookList />
+            <NotebookList pageLayout={true}/>
           </ProtectedRoute>
         ),
       },
